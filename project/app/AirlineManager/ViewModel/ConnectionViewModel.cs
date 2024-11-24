@@ -1,6 +1,6 @@
 namespace AirlineManager.ViewModel;
 
-public class ConnectionViewModel
+public class ConnectionViewModel : ViewModelBase
 {
     
 }
