@@ -1,10 +1,11 @@
+using System;
 using System.Data;
 using Npgsql;
 using ReactiveUI;
 
 namespace AirlineManager.Model;
 
-public class ConnectionModel : ModelBase
+public class ConnectionModel : ModelBase, IDisposable
 {
     private const string _host = "cheaply-fortuitous-candlefish.data-1.use1.tembo.io";
     private const int _port = 5432;
@@ -28,6 +29,8 @@ public class ConnectionModel : ModelBase
             value, nameof(DatabaseConnectionState));
     }
 
+    private NpgsqlConnection? connection;
+
     public ConnectionModel()
     {
         _userID = "db_user_1";
@@ -36,10 +39,21 @@ public class ConnectionModel : ModelBase
 
     public async void Connect()
     {
-        using NpgsqlConnection connection = new(_ConnectionString);
+        connection = new(_ConnectionString);
         connection.StateChange += (o, e) => DatabaseConnectionState = e.CurrentState;
         await connection.OpenAsync();
 
         await System.Threading.Tasks.Task.Delay(5000);
+    }
+
+    public void Dispose()
+    {
+        connection?.Dispose();
+        connection = null;
+    }
+
+    ~ConnectionModel()
+    {
+        Dispose();
     }
 }
