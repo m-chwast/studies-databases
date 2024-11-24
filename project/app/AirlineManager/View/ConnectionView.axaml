@@ -7,10 +7,12 @@
              x:DataType="vm:ConnectionViewModel"
 			 x:Class="AirlineManager.View.ConnectionView">
 
-	<Grid RowDefinitions="Auto">
+	<StackPanel Orientation="Horizontal">
 	
     	<TextBlock Text="Connection:" />
+
+        <TextBlock Text="{Binding ConnectionStatus}" />
 		
-    </Grid>
+    </StackPanel>
 
 </UserControl>
