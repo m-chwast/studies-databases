@@ -2,7 +2,7 @@ using Npgsql;
 
 namespace AirlineManager.Model;
 
-public class ConnectionModel
+public class ConnectionModel : ModelBase
 {
     private const string _host = "cheaply-fortuitous-candlefish.data-1.use1.tembo.io";
     private const int _port = 5432;
