@@ -42,8 +42,6 @@ public class ConnectionModel : ModelBase, IDisposable
         connection = new(_ConnectionString);
         connection.StateChange += (o, e) => DatabaseConnectionState = e.CurrentState;
         await connection.OpenAsync();
-
-        await System.Threading.Tasks.Task.Delay(5000);
     }
 
     public void Dispose()
