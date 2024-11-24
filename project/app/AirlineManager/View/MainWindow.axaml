@@ -11,6 +11,6 @@
 
         <v:ConnectionView 
                 x:Name="connectionView"
-                DataContext="{Binding ConnectionVM}"/>
+                DataContext="{Binding ConnectionVM, Mode=OneWay}"/>
 
 </Window>

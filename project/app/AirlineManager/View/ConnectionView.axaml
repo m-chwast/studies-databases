@@ -11,7 +11,7 @@
 	
     	<TextBlock Text="Connection:" />
 
-        <TextBlock Text="{Binding ConnectionStatus}" />
+        <TextBox Text="{Binding ConnectionStatus, Mode=TwoWay}" />
 		
     </StackPanel>
 
