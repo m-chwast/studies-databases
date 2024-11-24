@@ -1,8 +1,4 @@
-﻿using Avalonia.Threading;
-using ReactiveUI;
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
+﻿using ReactiveUI;
 
 namespace AirlineManager.ViewModel
 {
