@@ -9,9 +9,9 @@
 
 	<StackPanel Orientation="Horizontal">
 	
-    	<TextBlock Text="Connection:" />
+    	<TextBlock Text="Connection: " />
 
-        <TextBox Text="{Binding ConnectionStatus, Mode=TwoWay}" />
+        <TextBlock Text="{Binding ConnectionStatus}" />
 		
     </StackPanel>
 

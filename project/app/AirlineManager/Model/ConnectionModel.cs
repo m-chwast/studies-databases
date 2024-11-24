@@ -40,6 +40,6 @@ public class ConnectionModel : ModelBase
         connection.StateChange += (o, e) => DatabaseConnectionState = e.CurrentState;
         await connection.OpenAsync();
 
-        System.Threading.Thread.Sleep(5000);
+        await System.Threading.Tasks.Task.Delay(5000);
     }
 }
