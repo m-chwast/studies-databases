@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/AirlineManager/AirlineManager.csproj",
+                "${workspaceFolder}/AirlineManager.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
@@ -23,7 +23,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/AirlineManager/AirlineManager.csproj",
+                "${workspaceFolder}/AirlineManager.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
@@ -37,7 +37,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/AirlineManager/AirlineManager.csproj"
+                "${workspaceFolder}/AirlineManager.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
