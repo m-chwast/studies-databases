@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace airline_manager;
+namespace AirlineManager;
 
 public partial class MainWindow : Window
 {

@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using System;
 
-namespace airline_manager;
+namespace AirlineManager;
 
 class Program
 {

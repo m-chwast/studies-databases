@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-namespace airline_manager;
+namespace AirlineManager;
 
 public partial class App : Application
 {
