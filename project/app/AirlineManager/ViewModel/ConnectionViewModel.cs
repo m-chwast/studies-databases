@@ -2,7 +2,6 @@ using System.Reactive.Linq;
 using AirlineManager.Model;
 using ReactiveUI;
 using Microsoft.Extensions.Logging;
-using System.Reflection.Metadata.Ecma335;
 
 namespace AirlineManager.ViewModel;
 
