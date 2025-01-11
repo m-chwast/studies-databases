@@ -4,6 +4,7 @@ using System.Data;
 using System.Threading.Tasks;
 using Npgsql;
 using ReactiveUI;
+using Tmds.DBus.Protocol;
 
 namespace AirlineManager.Model;
 
@@ -64,10 +65,8 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
         await using var cmd = new NpgsqlCommand(query, connection);
         await using var reader = await cmd.ExecuteReaderAsync();
         {
-            if(reader is null)
-                return data;
-            
-            while(await reader.ReadAsync())
+            // this line is simply warning suppresion workaround, otherwise try-catch would be needed here 
+            while(await (reader?.ReadAsync() ?? Task<bool>.Factory.StartNew(() => {return false;})))
             {
                 var row = new List<string>();
                 for(int j = 0; j < reader?.FieldCount; j++)
