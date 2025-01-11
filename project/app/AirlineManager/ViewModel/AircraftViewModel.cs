@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 using AirlineManager.Model;
 using Avalonia.Controls;
 using ReactiveUI;
@@ -30,10 +31,33 @@ public class AircraftViewModel : ViewModelBase
         private set => this.RaiseAndSetIfChanged(ref _aircraft, value, nameof(Aircraft));   
     }
    
+    private bool _isShortList = true;
+    public bool IsShortList 
+    { 
+        get => _isShortList;
+        set => this.RaiseAndSetIfChanged(ref _isShortList, value, nameof(IsShortList));
+    }
+
+    private readonly ObservableAsPropertyHelper<bool> _idVisible;
+    public bool IdVisible => _idVisible.Value;
+
+    private readonly ObservableAsPropertyHelper<bool> _countVisible;
+    public bool CountVisible => _countVisible.Value;
+
     public AircraftViewModel(IDatabase database)
     {
         _database = database;
-        _database.Refresh += (o,e) => Refresh();     
+        _database.Refresh += (o,e) => Refresh();
+
+        _idVisible = this
+            .WhenAnyValue(x => x.IsShortList)
+            .Select(x => !x)
+            .ToProperty(this, x => x.IdVisible);
+    
+        _countVisible = this
+            .WhenAnyValue(x => x.IsShortList)
+            .Select(x => x)
+            .ToProperty(this, x => x.CountVisible);
     }
 
     private async void Refresh()

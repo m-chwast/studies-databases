@@ -11,6 +11,11 @@
 	
     	<TextBlock Text="Fleet: " DockPanel.Dock="Top"/>
         
+        <CheckBox 
+            Content="Display Short List" 
+            IsChecked="{Binding IsShortList}"
+            DockPanel.Dock="Top"/>
+
         <DataGrid ItemsSource="{Binding Aircraft}"
             Margin="0,10"
             BorderThickness="1"
@@ -18,9 +23,9 @@
             GridLinesVisibility="All"
             IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsVisible="True"/>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsVisible="{Binding IdVisible}"/>
                 <DataGridTextColumn Header="Type Name" Binding="{Binding Name}" />
-                <DataGridTextColumn Header="Type Count" Binding="{Binding Count}" IsVisible="True"/>
+                <DataGridTextColumn Header="Type Count" Binding="{Binding Count}" IsVisible="{Binding CountVisible}"/>
             </DataGrid.Columns>
         </DataGrid>
 
