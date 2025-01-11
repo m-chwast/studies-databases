@@ -37,6 +37,7 @@ public class AircraftViewModel : ViewModelBase
         get => _isShortList;
         set
         { 
+            Aircraft = new ObservableCollection<AircraftData>();
             this.RaiseAndSetIfChanged(ref _isShortList, value, nameof(IsShortList));
             Refresh();
         }
