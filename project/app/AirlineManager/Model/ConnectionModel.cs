@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Npgsql;
 using ReactiveUI;
@@ -68,7 +69,10 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
                 var row = new List<string>();
                 for(int j = 0; j < reader?.FieldCount; j++)
                 {
-                    row.Add(reader.GetValue(j)?.ToString() ?? "");
+                    string val = reader.GetValue(j)?.ToString() ?? "";
+                    // sanitize by removing excessive whitespaces
+                    val = Regex.Replace(val, @"\s+", " ");
+                    row.Add(val);
                 }
                 data.AddRow(row);
             }
