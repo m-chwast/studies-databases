@@ -29,13 +29,16 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
             this.RaiseAndSetIfChanged(
                 ref _databaseConnectionState, 
                 value, nameof(DatabaseConnectionState));
-            Refresh?.Invoke(this, EventArgs.Empty);
+            
+            if(IsOpen)
+                Refresh?.Invoke(this, EventArgs.Empty);
         }
     }
 
     private NpgsqlConnection? connection;
 
     public event EventHandler? Refresh;
+    public bool IsOpen { get => DatabaseConnectionState == ConnectionState.Open; }
 
     public ConnectionModel()
     {
