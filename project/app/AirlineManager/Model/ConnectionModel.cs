@@ -54,8 +54,6 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
         connection = new(_ConnectionString);
         connection.StateChange += (o, e) => DatabaseConnectionState = e.CurrentState;
         await connection.OpenAsync();
-
-        await GetData("SELECT a.aircraft_id, at.aircraft_type_name FROM airline.aircraft a JOIN airline.aircraft_type at ON a.aircraft_type_id = at.aircraft_type_id");
     }
 
     public async Task<DataTable> GetData(string query, bool logResult = true)
