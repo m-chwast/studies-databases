@@ -1,22 +1,24 @@
+using System.Collections.ObjectModel;
 using AirlineManager.Model;
-using DynamicData.Binding;
 
 namespace AirlineManager.ViewModel;
 
-public class AircraftViewModel
+public class AircraftViewModel : ViewModelBase
 {
     private IDatabase _database;
 
-    public IObservableCollection<string>? Aircraft { get; } = null;
-
+    public ObservableCollection<string> Aircraft { get; private set; }
+   
     public AircraftViewModel(IDatabase database)
     {
         _database = database;
         _database.Refresh += (o,e) => Refresh(); 
+    
+        Aircraft = new ObservableCollection<string>();    
     }
 
     private void Refresh()
     {
-        
+        InvokeOnUIThread(() => Aircraft.Add("123")); 
     }
 }
