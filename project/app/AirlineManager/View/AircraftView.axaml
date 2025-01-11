@@ -9,8 +9,13 @@
 
 	<StackPanel Orientation="Horizontal">
 	
-    	<TextBlock Text="Aircrafts: " />
+    	<TextBlock Text="Fleet: " />
         
+        <DataGrid ItemsSource="{Binding Aircraft}" 
+            Margin="10"
+            IsReadOnly="True"
+            AutoGenerateColumns="True" />
+
     </StackPanel>
 
 </UserControl>
