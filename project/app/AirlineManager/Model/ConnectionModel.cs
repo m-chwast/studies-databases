@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 using Npgsql;
 using ReactiveUI;
 
@@ -51,6 +53,39 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
         connection = new(_ConnectionString);
         connection.StateChange += (o, e) => DatabaseConnectionState = e.CurrentState;
         await connection.OpenAsync();
+
+        await GetData("SELECT a.aircraft_id, at.aircraft_type_name FROM airline.aircraft a JOIN airline.aircraft_type at ON a.aircraft_type_id = at.aircraft_type_id");
+    }
+
+    public async Task<List<List<string>>> GetData(string query)
+    {
+        List<List<string>> data = new();
+
+        await using var cmd = new NpgsqlCommand(query, connection);
+        await using var reader = await cmd.ExecuteReaderAsync();
+        {
+            if(reader is null)
+                return data;
+            
+            while(await reader.ReadAsync())
+            {
+                var row = new List<string>();
+                for(int j = 0; j < reader?.FieldCount; j++)
+                {
+                    row.Add(reader.GetValue(j)?.ToString() ?? "");
+                }
+                data.Add(row);
+            }
+        }
+
+        foreach(var v in data)
+        {
+            foreach(var s in v)
+                Console.Write(s + ", ");
+            Console.WriteLine();
+        }
+
+        return data;
     }
 
     public void Dispose()
