@@ -24,12 +24,18 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
     public ConnectionState DatabaseConnectionState
     {
         get => _databaseConnectionState;
-        private set => this.RaiseAndSetIfChanged(
-            ref _databaseConnectionState, 
-            value, nameof(DatabaseConnectionState));
+        private set
+        {
+            this.RaiseAndSetIfChanged(
+                ref _databaseConnectionState, 
+                value, nameof(DatabaseConnectionState));
+            Refresh?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private NpgsqlConnection? connection;
+
+    public event EventHandler? Refresh;
 
     public ConnectionModel()
     {
