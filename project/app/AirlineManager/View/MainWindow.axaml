@@ -9,8 +9,16 @@
         x:DataType="vm:MainWindowViewModel"
         Title="Airline Manager">
 
-        <v:ConnectionView 
-                x:Name="connectionView"
-                DataContext="{Binding ConnectionVM, Mode=OneWay}"/>
+	<StackPanel>
+
+		<v:ConnectionView 
+				x:Name="connectionView"
+				DataContext="{Binding ConnectionVM, Mode=OneWay}"/>
+
+		<v:AircraftView 
+				x:Name="AircraftView"
+				DataContext="{Binding AircraftVM, Mode=OneWay}"/>
+		
+	</StackPanel>
 
 </Window>

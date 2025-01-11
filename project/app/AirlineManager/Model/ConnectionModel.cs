@@ -5,7 +5,7 @@ using ReactiveUI;
 
 namespace AirlineManager.Model;
 
-public class ConnectionModel : ModelBase, IDisposable
+public class ConnectionModel : ModelBase, IDatabase, IDisposable
 {
     private const string _host = "cheaply-fortuitous-candlefish.data-1.use1.tembo.io";
     private const int _port = 5432;
