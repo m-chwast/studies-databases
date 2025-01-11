@@ -7,15 +7,23 @@
              x:DataType="vm:AircraftViewModel"
 			 x:Class="AirlineManager.View.AircraftView">
 
-	<StackPanel Orientation="Horizontal">
+	<DockPanel LastChildFill="False" Margin="10">
 	
-    	<TextBlock Text="Fleet: " />
+    	<TextBlock Text="Fleet: " DockPanel.Dock="Top"/>
         
-        <DataGrid ItemsSource="{Binding Aircraft}" 
-            Margin="10"
-            IsReadOnly="True"
-            AutoGenerateColumns="True" />
+        <DataGrid ItemsSource="{Binding Aircraft}"
+            Margin="0,10"
+            BorderThickness="1"
+            BorderBrush="Gray"
+            GridLinesVisibility="All"
+            IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsVisible="True"/>
+                <DataGridTextColumn Header="Type Name" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Type Count" Binding="{Binding Count}" IsVisible="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
-    </StackPanel>
+    </DockPanel>
 
 </UserControl>
