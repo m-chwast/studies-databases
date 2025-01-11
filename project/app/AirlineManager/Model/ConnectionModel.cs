@@ -58,7 +58,7 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
         await GetData("SELECT a.aircraft_id, at.aircraft_type_name FROM airline.aircraft a JOIN airline.aircraft_type at ON a.aircraft_type_id = at.aircraft_type_id");
     }
 
-    public async Task<List<List<string>>> GetData(string query)
+    public async Task<List<List<string>>> GetData(string query, bool logResult = true)
     {
         List<List<string>> data = new();
 
@@ -77,11 +77,14 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
             }
         }
 
-        foreach(var v in data)
+        if(logResult)
         {
-            foreach(var s in v)
-                Console.Write(s + ", ");
-            Console.WriteLine();
+            foreach(var v in data)
+            {
+                foreach(var s in v)
+                    Console.Write(s + ", ");
+                Console.WriteLine();
+            }
         }
 
         return data;
