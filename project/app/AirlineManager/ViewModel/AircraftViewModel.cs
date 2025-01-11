@@ -11,15 +11,15 @@ public class AircraftViewModel : ViewModelBase
 
     public class AircraftData
     {
-        private string _id; 
-        public int Id { get => int.Parse(_id); }
-        private string _name;
-        public string Name { get => _name; }
+        public int Id { get; }
+        public string Name { get; }
+        public int Count { get; }
 
-        public AircraftData(string id, string name)
+        public AircraftData(string name, string? id = null, int? count = null)
         {
-            _id = id;
-            _name = name;
+            Id = int.Parse(id ?? "-1");
+            Name = name;
+            Count = count ?? -1;
         }
     }
  
@@ -46,7 +46,7 @@ public class AircraftViewModel : ViewModelBase
         ObservableCollection<AircraftData> newAircraft = new();
         foreach(var row in dataTable.Data)
         {
-            AircraftData aircraftData = new(row[0], row[1]);
+            AircraftData aircraftData = new(row[1], row[0]);
             newAircraft.Add(aircraftData);
         }
         Aircraft = newAircraft;
