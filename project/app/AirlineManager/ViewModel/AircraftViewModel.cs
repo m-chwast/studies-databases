@@ -23,7 +23,12 @@ public class AircraftViewModel : ViewModelBase
         }
     }
  
-    public ObservableCollection<AircraftData> Aircraft { get; private set; } = new();
+    private ObservableCollection<AircraftData> _aircraft = new();
+    public ObservableCollection<AircraftData> Aircraft 
+    { 
+        get => _aircraft; 
+        private set => this.RaiseAndSetIfChanged(ref _aircraft, value, nameof(Aircraft));   
+    }
    
     public AircraftViewModel(IDatabase database)
     {
@@ -50,6 +55,5 @@ public class AircraftViewModel : ViewModelBase
             newAircraft.Add(aircraftData);
         }
         Aircraft = newAircraft;
-        this.RaisePropertyChanged(nameof(Aircraft));
     }
 }
