@@ -58,10 +58,9 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
         await GetData("SELECT a.aircraft_id, at.aircraft_type_name FROM airline.aircraft a JOIN airline.aircraft_type at ON a.aircraft_type_id = at.aircraft_type_id");
     }
 
-    public async Task<List<List<string>>> GetData(string query, bool logResult = true)
+    public async Task<DataTable> GetData(string query, bool logResult = true)
     {
-        List<List<string>> data = new();
-
+        DataTable data = new();
         await using var cmd = new NpgsqlCommand(query, connection);
         await using var reader = await cmd.ExecuteReaderAsync();
         {
@@ -73,19 +72,12 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
                 {
                     row.Add(reader.GetValue(j)?.ToString() ?? "");
                 }
-                data.Add(row);
+                data.AddRow(row);
             }
         }
 
         if(logResult)
-        {
-            foreach(var v in data)
-            {
-                foreach(var s in v)
-                    Console.Write(s + ", ");
-                Console.WriteLine();
-            }
-        }
+            Console.WriteLine(data);
 
         return data;
     }
