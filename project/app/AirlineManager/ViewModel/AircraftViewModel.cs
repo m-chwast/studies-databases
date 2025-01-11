@@ -16,11 +16,11 @@ public class AircraftViewModel : ViewModelBase
         public string Name { get; }
         public int Count { get; }
 
-        public AircraftData(string name, string? id = null, int? count = null)
+        public AircraftData(string name, string? id = null, string? count = null)
         {
             Id = int.Parse(id ?? "-1");
             Name = name;
-            Count = count ?? -1;
+            Count = int.Parse(count ?? "-1");
         }
     }
  
@@ -35,7 +35,11 @@ public class AircraftViewModel : ViewModelBase
     public bool IsShortList 
     { 
         get => _isShortList;
-        set => this.RaiseAndSetIfChanged(ref _isShortList, value, nameof(IsShortList));
+        set
+        { 
+            this.RaiseAndSetIfChanged(ref _isShortList, value, nameof(IsShortList));
+            Refresh();
+        }
     }
 
     private readonly ObservableAsPropertyHelper<bool> _idVisible;
@@ -62,22 +66,33 @@ public class AircraftViewModel : ViewModelBase
 
     private async void Refresh()
     {
-        const string aircraftQuery = @"
+        const string aircraftLongQuery = @"
             SELECT a.aircraft_id, at.aircraft_type_name
             FROM airline.aircraft a JOIN airline.aircraft_type at 
             ON a.aircraft_type_id = at.aircraft_type_id";
-        var dataTable = await _database.GetData(aircraftQuery);
-        InvokeOnUIThread(() => UpdateAirlineCollection(dataTable));
+        const string aircraftShortQuery = @"
+            SELECT at.aircraft_type_name, COUNT(*)
+            FROM airline.aircraft a
+            JOIN airline.aircraft_type at
+            ON a.aircraft_type_id = at.aircraft_type_id
+            GROUP BY at.aircraft_type_name";
+
+        bool shortList = IsShortList;
+        string query = shortList ? aircraftShortQuery : aircraftLongQuery;
+        var dataTable = await _database.GetData(query);
+        UpdateAirlineCollection(dataTable, shortList);
     }
 
-    private void UpdateAirlineCollection(DataTable dataTable)
+    private void UpdateAirlineCollection(DataTable dataTable, bool isShortList)
     {
         ObservableCollection<AircraftData> newAircraft = new();
         foreach(var row in dataTable.Data)
         {
-            AircraftData aircraftData = new(row[1], row[0]);
+            AircraftData aircraftData = isShortList 
+                ? new(row[0], null, row[1])
+                : new(row[1], row[0]);
             newAircraft.Add(aircraftData);
         }
-        Aircraft = newAircraft;
+        InvokeOnUIThread(() => Aircraft = newAircraft);
     }
 }
