@@ -67,10 +67,14 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
         }
         catch
         {
-            Console.WriteLine("Exception while reading data! Trying to refresh...");
-            _refreshTimer.Interval = 5000;
-            _refreshTimer.AutoReset = false;
-            _refreshTimer.Start();
+            Console.WriteLine("Exception while reading data!");
+            if(_refreshTimer.Enabled == false)
+            {       
+                Console.WriteLine("Trying to refresh...");
+                _refreshTimer.Interval = 5000;
+                _refreshTimer.AutoReset = false;
+                _refreshTimer.Start();
+            }
         }
 
         if(logResult)
