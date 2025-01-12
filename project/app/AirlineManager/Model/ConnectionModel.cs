@@ -39,7 +39,7 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
         }
     }
 
-    private NpgsqlConnection? connection;
+    private NpgsqlDataSource _dataSource;
 
     public event EventHandler? Refresh;
     public bool IsOpen { get => DatabaseConnectionState == ConnectionState.Open; }
@@ -48,19 +48,14 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
     {
         _userID = "db_user_1";
         _password = "db_user1_password";
-    }
 
-    public async void Connect()
-    {
-        connection = new(_ConnectionString);
-        connection.StateChange += (o, e) => DatabaseConnectionState = e.CurrentState;
-        await connection.OpenAsync();
+        _dataSource = NpgsqlDataSource.Create(_ConnectionString);
     }
 
     public async Task<DataTable> GetData(string query, bool logResult = true)
     {
         DataTable data = new();
-        await using var cmd = new NpgsqlCommand(query, connection);
+        await using var cmd = _dataSource.CreateCommand(query);
         await using var reader = await cmd.ExecuteReaderAsync();
         {
             // this line is simply warning suppresion workaround, otherwise try-catch would be needed here 
@@ -86,8 +81,7 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
 
     public void Dispose()
     {
-        connection?.Dispose();
-        connection = null;
+        _dataSource.Dispose();
     }
 
     ~ConnectionModel()

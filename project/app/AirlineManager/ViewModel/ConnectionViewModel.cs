@@ -23,7 +23,6 @@ public class ConnectionViewModel : ViewModelBase
             .ToProperty(this, x => x.ConnectionStatus); 
 
         _logger.LogInformation("Connecting to database");
-        _connectionModel.Connect();
     }
 
     public IDatabase GetDatabase() => _connectionModel;

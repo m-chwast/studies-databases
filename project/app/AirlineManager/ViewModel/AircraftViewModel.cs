@@ -51,6 +51,8 @@ public class AircraftViewModel : ViewModelBase
             .WhenAnyValue(x => x.IsShortList)
             .Select(x => x)
             .ToProperty(this, x => x.CountVisible);
+
+        TriggerRefresh();
     }
 
     private async Task Refresh()
