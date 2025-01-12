@@ -1,3 +1,4 @@
+using AirlineManager.Model;
 using Microsoft.Extensions.Logging;
 
 namespace AirlineManager.ViewModel;
@@ -10,6 +11,8 @@ public class MainWindowViewModel : ViewModelBase
     private readonly AircraftViewModel _aircraftViewModel;
     public AircraftViewModel AircraftVM { get => _aircraftViewModel; }
 
+    private readonly PersonnelViewModel _personnelViewModel;
+    public PersonnelViewModel PersonnelVM { get => _personnelViewModel; }
 
     public MainWindowViewModel()
     {
@@ -19,6 +22,8 @@ public class MainWindowViewModel : ViewModelBase
         _connectionViewModel = new ConnectionViewModel(
             loggerFactory.CreateLogger("Connection"));
 
-        _aircraftViewModel = new AircraftViewModel(_connectionViewModel.GetDatabase());
+        IDatabase database = _connectionViewModel.GetDatabase();
+        _aircraftViewModel = new AircraftViewModel(database);
+        _personnelViewModel = new PersonnelViewModel(database);
     }
 }
