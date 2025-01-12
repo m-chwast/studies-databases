@@ -7,11 +7,17 @@
              x:DataType="vm:ConnectionViewModel"
 			 x:Class="AirlineManager.View.ConnectionView">
 
-	<StackPanel Orientation="Horizontal" Margin="10">
-	
-    	<TextBlock Text="Connection: " />
+    <StackPanel Orientation="Vertical" Margin="10">
 
-        <TextBlock Text="{Binding ConnectionStatus}"/>
+        <StackPanel Orientation="Horizontal">
+        
+            <TextBlock Text="Connection: " />
+
+            <TextBlock Text="{Binding ConnectionStatus}"/>
+
+        </StackPanel>
+
+        <TextBlock Text="{Binding DatabaseStats}" Margin="0,10"/>
 
     </StackPanel>
 
