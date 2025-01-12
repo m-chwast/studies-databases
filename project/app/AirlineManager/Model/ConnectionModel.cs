@@ -24,6 +24,20 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
         set => this.RaiseAndSetIfChanged(ref _databaseFault, value, nameof(DatabaseFault));
     }
 
+    private int _databaseQueriesTotal = 0;
+    public int DatabaseQueriesTotal
+    {
+        get => _databaseQueriesTotal;
+        set => this.RaiseAndSetIfChanged(ref _databaseQueriesTotal, value, nameof(DatabaseQueriesTotal));
+    }
+
+    private int _databaseQueriesSuccessful = 0;
+    public int DatabaseQueriesSuccessful
+    {
+        get => _databaseQueriesSuccessful;
+        set => this.RaiseAndSetIfChanged(ref _databaseQueriesSuccessful, value, nameof(DatabaseQueriesSuccessful));
+    }
+
     private string _ConnectionString =>
         $"Host={_host};" +
         $"Port={_port};" +
@@ -48,8 +62,9 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
 
     public async Task<DataTable> GetData(string query, bool logResult = true)
     {
+        DatabaseQueriesTotal++;
+        bool querySuccess = true;
         DataTable data = new();
-
         try
         {
             await using var cmd = _dataSource.CreateCommand(query);
@@ -71,6 +86,7 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
         }
         catch
         {
+            querySuccess = false;
             Console.WriteLine("Exception while reading data!");
             if(_refreshTimer.Enabled == false)
             {       
@@ -81,6 +97,9 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
                 _refreshTimer.Start();
             }
         }
+
+        if(querySuccess)
+            DatabaseQueriesSuccessful++;
 
         if(logResult)
             Console.WriteLine(data);

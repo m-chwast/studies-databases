@@ -22,9 +22,18 @@ public class ConnectionViewModel : ViewModelBase
             .ToProperty(this, x => x.ConnectionStatus);
 
         _databaseStats = this
-            .WhenAnyValue(x => x._connectionModel)
-            .Select(x => "")
+            .WhenAnyValue(x => x._connectionModel.DatabaseQueriesTotal,
+            x => x._connectionModel.DatabaseQueriesSuccessful)
+            .Select(x => GetDatabaseStatsString(x.Item1, x.Item2))
             .ToProperty(this, x => x.DatabaseStats);
+    }
+
+    private string GetDatabaseStatsString(int total, int success)
+    {
+        string stats = "Database Queries: ";
+        stats += total.ToString() + " total, ";
+        stats += success.ToString() + " successful";
+        return stats;
     }
 
     public IDatabase GetDatabase() => _connectionModel;
