@@ -79,6 +79,18 @@ public class AircraftViewModel : ViewModelBase
             GROUP BY at.aircraft_type_name
             ORDER BY cnt DESC";
 
+        // another idea was to do this in a single query, something like this
+        /*
+        SELECT a.aircraft_id, at.aircraft_type_name, type_counts.type_count
+        FROM airline.aircraft a JOIN airline.aircraft_type at 
+        ON a.aircraft_type_id = at.aircraft_type_id
+        JOIN 
+            (SELECT a.aircraft_type_id aircraft_type_id, COUNT(*) type_count
+            FROM airline.aircraft a
+            GROUP BY a.aircraft_type_id) type_counts 
+        ON a.aircraft_type_id = type_counts.aircraft_type_id;
+        */
+
         bool shortList = IsShortList;
         string query = shortList ? aircraftShortQuery : aircraftLongQuery;
         var dataTable = await _database.GetData(query);
