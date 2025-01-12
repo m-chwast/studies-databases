@@ -72,11 +72,12 @@ public class AircraftViewModel : ViewModelBase
             FROM airline.aircraft a JOIN airline.aircraft_type at 
             ON a.aircraft_type_id = at.aircraft_type_id";
         const string aircraftShortQuery = @"
-            SELECT at.aircraft_type_name, COUNT(*)
+            SELECT at.aircraft_type_name, COUNT(*) cnt
             FROM airline.aircraft a
             JOIN airline.aircraft_type at
             ON a.aircraft_type_id = at.aircraft_type_id
-            GROUP BY at.aircraft_type_name";
+            GROUP BY at.aircraft_type_name
+            ORDER BY cnt DESC";
 
         bool shortList = IsShortList;
         string query = shortList ? aircraftShortQuery : aircraftLongQuery;
