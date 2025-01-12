@@ -8,9 +8,7 @@
 			 x:Class="AirlineManager.View.AircraftView">
 
 	<DockPanel LastChildFill="False" Margin="10">
-	
-    	<TextBlock Text="Fleet: " DockPanel.Dock="Top"/>
-        
+	     
         <CheckBox 
             Content="Display Short List" 
             IsChecked="{Binding IsShortList}"

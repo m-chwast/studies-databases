@@ -11,10 +11,17 @@
 
 	<DockPanel LastChildFill="False">
 
-		<v:AircraftView 
-			x:Name="AircraftView"
-			DataContext="{Binding AircraftVM, Mode=OneWay}"
-			DockPanel.Dock="Top"/>
+		<TabControl
+			DockPanel.Dock="Top"
+			Margin="10">
+
+			<TabItem Header="Fleet">
+				<v:AircraftView 
+					x:Name="AircraftView"
+					DataContext="{Binding AircraftVM, Mode=OneWay}"/>
+			</TabItem>	
+
+		</TabControl>
 
 		<v:ConnectionView 
 			x:Name="connectionView"
