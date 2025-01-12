@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Timers;
 using System.Threading.Tasks;
 using Npgsql;
 namespace AirlineManager.Model;
@@ -12,6 +13,8 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
     private const string _database = "postgres";
     private readonly string _userID;
     private readonly string _password;
+
+    private Timer _refreshTimer;
 
     private string _ConnectionString =>
         $"Host={_host};" +
@@ -27,7 +30,14 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
     public ConnectionModel()
     {
         _userID = "db_user_1";
-        _password = "db_user1_password1";
+        _password = "db_user1_password";
+
+        _refreshTimer = new Timer();
+        _refreshTimer.Elapsed += (o,e) => 
+            {
+                Console.WriteLine("Invoking Refresh event");
+                Refresh?.Invoke(this, EventArgs.Empty);
+            };
 
         _dataSource = NpgsqlDataSource.Create(_ConnectionString);
     }
@@ -58,7 +68,9 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
         catch
         {
             Console.WriteLine("Exception while reading data! Trying to refresh...");
-            
+            _refreshTimer.Interval = 5000;
+            _refreshTimer.AutoReset = false;
+            _refreshTimer.Start();
         }
 
         if(logResult)
