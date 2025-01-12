@@ -9,6 +9,24 @@
 
 	<DockPanel LastChildFill="False" Margin="10">
 	     
+        <StackPanel DockPanel.Dock="Top">
+
+        <TextBlock Text="Show:"/>
+
+        <CheckBox 
+            Content="Flight Attendants" 
+            IsChecked="{Binding ShowFlightAttendants}"/>
+
+        <CheckBox 
+            Content="Captains" 
+            IsChecked="{Binding ShowCaptains}"/>
+
+        <CheckBox 
+            Content="First Officers" 
+            IsChecked="{Binding ShowFirstOfficers}"/>
+
+        </StackPanel>
+        
     </DockPanel>
 
 </UserControl>
