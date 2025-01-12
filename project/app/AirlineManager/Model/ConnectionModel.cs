@@ -27,7 +27,7 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
     public ConnectionModel()
     {
         _userID = "db_user_1";
-        _password = "db_user1_password";
+        _password = "db_user1_password1";
 
         _dataSource = NpgsqlDataSource.Create(_ConnectionString);
     }
@@ -35,9 +35,12 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
     public async Task<DataTable> GetData(string query, bool logResult = true)
     {
         DataTable data = new();
-        await using var cmd = _dataSource.CreateCommand(query);
-        await using var reader = await cmd.ExecuteReaderAsync();
+
+        try
         {
+            await using var cmd = _dataSource.CreateCommand(query);
+            await using var reader = await cmd.ExecuteReaderAsync();
+            
             // this line is simply warning suppresion workaround, otherwise try-catch would be needed here 
             while(await (reader?.ReadAsync() ?? Task<bool>.Factory.StartNew(() => {return false;})))
             {
@@ -51,6 +54,11 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
                 }
                 data.AddRow(row);
             }
+        }
+        catch
+        {
+            Console.WriteLine("Exception while reading data! Trying to refresh...");
+            
         }
 
         if(logResult)
