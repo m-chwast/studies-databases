@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 namespace AirlineManager.Model;
 
 public class PersonnelModel : ModelBase
@@ -9,5 +12,11 @@ public class PersonnelModel : ModelBase
         _database = database;
     }
 
+    public async Task<IEnumerable<PersonnelData>> GetNewData(bool flightAttendants, bool captains, bool firstOfficers)
+    {
+        List<PersonnelData> personnel = new();
+
+        return personnel;
+    }
 
 }

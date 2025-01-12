@@ -49,8 +49,8 @@ public class PersonnelViewModel : ViewModelBase
 
     private async Task Refresh()
     {
-        //var newData = await _model.GetNewData(IsShortList);
-        //InvokeOnUIThread(() => Aircraft = new ObservableCollection<AircraftData>(newData));
+        var newData = await _model.GetNewData(ShowFlightAttendants, ShowCaptains, ShowFirstOfficers);
+        InvokeOnUIThread(() => Personnel = new ObservableCollection<PersonnelData>(newData));
     }
 
     private void TriggerRefresh() => Task.Factory.StartNew(
