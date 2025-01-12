@@ -1,22 +1,18 @@
 using System.Reactive.Linq;
 using AirlineManager.Model;
-using Microsoft.Extensions.Logging;
 using ReactiveUI;
 
 namespace AirlineManager.ViewModel;
 
 public class ConnectionViewModel : ViewModelBase
 {
-    private readonly ILogger _logger;
     private ConnectionModel _connectionModel = new();
 
     private ObservableAsPropertyHelper<string> _connectionStatus;
     public string ConnectionStatus => _connectionStatus.Value;
 
-    public ConnectionViewModel(ILogger logger)
+    public ConnectionViewModel()
     {
-        _logger = logger;
-        
         _connectionStatus = this
             .WhenAnyValue(x => x._connectionModel.DatabaseFault)
             .Select(x => x ? "Fault detected - refreshing..." : "OK")

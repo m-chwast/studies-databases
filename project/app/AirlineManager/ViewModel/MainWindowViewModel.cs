@@ -1,5 +1,4 @@
 using AirlineManager.Model;
-using Microsoft.Extensions.Logging;
 
 namespace AirlineManager.ViewModel;
 
@@ -16,11 +15,7 @@ public class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
-        using ILoggerFactory loggerFactory = LoggerFactory
-            .Create(builder => builder.AddConsole());
-        
-        _connectionViewModel = new ConnectionViewModel(
-            loggerFactory.CreateLogger("Connection"));
+        _connectionViewModel = new ConnectionViewModel();
 
         IDatabase database = _connectionViewModel.GetDatabase();
         _aircraftViewModel = new AircraftViewModel(database);
