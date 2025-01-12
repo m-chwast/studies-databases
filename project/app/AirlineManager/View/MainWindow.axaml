@@ -9,16 +9,18 @@
         x:DataType="vm:MainWindowViewModel"
         Title="Airline Manager">
 
-	<StackPanel>
-
-		<v:ConnectionView 
-				x:Name="connectionView"
-				DataContext="{Binding ConnectionVM, Mode=OneWay}"/>
+	<DockPanel LastChildFill="False">
 
 		<v:AircraftView 
-				x:Name="AircraftView"
-				DataContext="{Binding AircraftVM, Mode=OneWay}"/>
-		
-	</StackPanel>
+			x:Name="AircraftView"
+			DataContext="{Binding AircraftVM, Mode=OneWay}"
+			DockPanel.Dock="Top"/>
+
+		<v:ConnectionView 
+			x:Name="connectionView"
+			DataContext="{Binding ConnectionVM, Mode=OneWay}"
+			DockPanel.Dock="Bottom"/>
+
+	</DockPanel>
 
 </Window>
