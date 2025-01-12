@@ -11,6 +11,8 @@
 	
     	<TextBlock Text="Connection: " />
 
+        <TextBlock Text="{Binding ConnectionStatus}"/>
+
     </StackPanel>
 
 </UserControl>
