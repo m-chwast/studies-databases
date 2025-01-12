@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Timers;
 using System.Threading.Tasks;
 using Npgsql;
+using ReactiveUI;
 namespace AirlineManager.Model;
 
 public class ConnectionModel : ModelBase, IDatabase, IDisposable
@@ -15,6 +16,13 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
     private readonly string _password;
 
     private Timer _refreshTimer;
+
+    private bool _databaseFault = false;
+    public bool DatabaseFault
+    {
+        get => _databaseFault;
+        set => this.RaiseAndSetIfChanged(ref _databaseFault, value, nameof(DatabaseFault));
+    }
 
     private string _ConnectionString =>
         $"Host={_host};" +
@@ -33,11 +41,7 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
         _password = "db_user1_password";
 
         _refreshTimer = new Timer();
-        _refreshTimer.Elapsed += (o,e) => 
-            {
-                Console.WriteLine("Invoking Refresh event");
-                Refresh?.Invoke(this, EventArgs.Empty);
-            };
+        _refreshTimer.Elapsed += (o,e) => DatabaseRefresh();
 
         _dataSource = NpgsqlDataSource.Create(_ConnectionString);
     }
@@ -70,6 +74,7 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
             Console.WriteLine("Exception while reading data!");
             if(_refreshTimer.Enabled == false)
             {       
+                DatabaseFault = true;
                 Console.WriteLine("Trying to refresh...");
                 _refreshTimer.Interval = 5000;
                 _refreshTimer.AutoReset = false;
@@ -81,6 +86,13 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
             Console.WriteLine(data);
 
         return data;
+    }
+
+    private void DatabaseRefresh()
+    {
+        DatabaseFault = false;
+        Console.WriteLine("Invoking Refresh event");
+        Refresh?.Invoke(this, EventArgs.Empty);
     }
 
     public void Dispose()
