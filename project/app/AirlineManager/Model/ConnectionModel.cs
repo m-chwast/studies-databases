@@ -1,12 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Npgsql;
-using ReactiveUI;
-using Tmds.DBus.Protocol;
-
 namespace AirlineManager.Model;
 
 public class ConnectionModel : ModelBase, IDatabase, IDisposable
@@ -24,25 +20,9 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
         $"User Id={_userID};" +
         $"Password={_password};";
 
-    private ConnectionState _databaseConnectionState;
-    public ConnectionState DatabaseConnectionState
-    {
-        get => _databaseConnectionState;
-        private set
-        {
-            this.RaiseAndSetIfChanged(
-                ref _databaseConnectionState, 
-                value, nameof(DatabaseConnectionState));
-            
-            if(IsOpen)
-                Refresh?.Invoke(this, EventArgs.Empty);
-        }
-    }
-
     private NpgsqlDataSource _dataSource;
 
     public event EventHandler? Refresh;
-    public bool IsOpen { get => DatabaseConnectionState == ConnectionState.Open; }
 
     public ConnectionModel()
     {
