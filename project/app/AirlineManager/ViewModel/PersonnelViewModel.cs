@@ -1,4 +1,5 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using AirlineManager.Model;
@@ -9,6 +10,13 @@ namespace AirlineManager.ViewModel;
 public class PersonnelViewModel : ViewModelBase
 {
     private PersonnelModel _model;
+
+    private ObservableCollection<PersonnelData> _personnel = new();
+    public ObservableCollection<PersonnelData> Personnel
+    {
+        get => _personnel;
+        private set => this.RaiseAndSetIfChanged(ref _personnel, value, nameof(Personnel));
+    }
 
     private bool _showFlightAttendants = true;
     public bool ShowFlightAttendants

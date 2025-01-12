@@ -26,6 +26,20 @@
             IsChecked="{Binding ShowFirstOfficers}"/>
 
         </StackPanel>
+
+        <DataGrid ItemsSource="{Binding Personnel}"
+            Margin="0,10"
+            BorderThickness="1"
+            BorderBrush="Gray"
+            GridLinesVisibility="All"
+            IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding FirstName}"/>
+                <DataGridTextColumn Header="Surname" Binding="{Binding LastName}"/>
+                <DataGridTextColumn Header="Role" Binding="{Binding Role}"/>
+            </DataGrid.Columns>
+        </DataGrid>
         
     </DockPanel>
 
