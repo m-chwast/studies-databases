@@ -5,6 +5,7 @@ using System.Timers;
 using System.Threading.Tasks;
 using Npgsql;
 using ReactiveUI;
+
 namespace AirlineManager.Model;
 
 public class ConnectionModel : ModelBase, IDatabase, IDisposable
@@ -38,6 +39,8 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
         set => this.RaiseAndSetIfChanged(ref _databaseQueriesSuccessful, value, nameof(DatabaseQueriesSuccessful));
     }
 
+    private System.Threading.Mutex _queryCountMutex = new();
+
     private string _ConnectionString =>
         $"Host={_host};" +
         $"Port={_port};" +
@@ -62,7 +65,10 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
 
     public async Task<DataTable> GetData(string query, bool logResult = true)
     {
+        _queryCountMutex.WaitOne();
         DatabaseQueriesTotal++;
+        _queryCountMutex.ReleaseMutex();
+
         bool querySuccess = true;
         DataTable data = new();
         try
@@ -104,7 +110,11 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
         }
 
         if(querySuccess)
+        {
+            _queryCountMutex.WaitOne();
             DatabaseQueriesSuccessful++;
+            _queryCountMutex.ReleaseMutex();
+        }
 
         if(logResult)
             Console.WriteLine(data);
