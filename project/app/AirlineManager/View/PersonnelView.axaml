@@ -69,10 +69,14 @@
 
             <StackPanel Margin="5">
                 <TextBlock Text="Role"/>
-                <ComboBox ItemsSource="{Binding Roles}" Width="150"/>
+                <ComboBox ItemsSource="{Binding Roles}" 
+                    SelectedItem="{Binding SelectedRole, Mode=OneWayToSource}"
+                    Width="150">
+                </ComboBox>
             </StackPanel>
 
-            <Button Margin="5" 
+            <Button Margin="5"
+                Command="{Binding AddPersonCommand}" 
                 Content="Add"
                 Width="150"/>
                 

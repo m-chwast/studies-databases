@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using AirlineManager.Model;
@@ -60,6 +61,15 @@ public class PersonnelViewModel : ViewModelBase
         private set => this.RaiseAndSetIfChanged(ref _roles, value, nameof(Roles));
     }
 
+    private string _selectedRole = "";
+    public string SelectedRole
+    {
+        get => _selectedRole;
+        set => this.RaiseAndSetIfChanged(ref _selectedRole, value, nameof(SelectedRole));
+    }
+
+    public ReactiveCommand<Unit, Unit> AddPersonCommand { get; }
+
     public PersonnelViewModel(IDatabase database)
     {
         database.Refresh += async (o,e) => { await RefreshRoles(); await Refresh(); };
@@ -68,6 +78,13 @@ public class PersonnelViewModel : ViewModelBase
 
         this.WhenAnyValue(x => x.ShowFlightAttendants, x => x.ShowCaptains, x => x.ShowFirstOfficers)
             .Subscribe(_ => TriggerRefresh());
+
+        AddPersonCommand = ReactiveCommand.CreateFromTask(AddPerson, 
+            this.WhenAnyValue(
+            x => x.NewPersonName, x => x.NewPersonSurname, x => x.SelectedRole, 
+            (a, b, c) => !string.IsNullOrWhiteSpace(a) 
+            && !string.IsNullOrWhiteSpace(b)
+            && !string.IsNullOrWhiteSpace(c)));
     
         TriggerRefreshRoles();
     }
@@ -86,4 +103,9 @@ public class PersonnelViewModel : ViewModelBase
 
     private void TriggerRefresh() => Task.Factory.StartNew(Refresh);
     private void TriggerRefreshRoles() => Task.Factory.StartNew(RefreshRoles);
+
+    private async Task AddPerson() 
+    {
+        await Task.CompletedTask;
+    }
 }
