@@ -28,6 +28,22 @@ public class PersonnelModel : ModelBase
         return personnel;
     }
 
+    public async Task<IEnumerable<string>> GetRoles()
+    {
+        const string query = @"
+            SELECT r.role_name
+            FROM airline.role r
+            ORDER BY r.role_id;";
+
+        var dataTable = await _database.GetData(query);
+
+        List<string> roles = new();
+        foreach(var row in dataTable.Data)
+            roles.Add(row[0]);
+
+        return roles;
+    }
+
     private string GetQuery(bool flightAttendants, bool captains, bool firstOfficers)
     {
         string query = @"

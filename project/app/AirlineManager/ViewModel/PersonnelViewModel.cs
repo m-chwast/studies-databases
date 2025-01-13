@@ -62,10 +62,20 @@ public class PersonnelViewModel : ViewModelBase
 
     public PersonnelViewModel(IDatabase database)
     {
+        database.Refresh += async (o,e) => { await RefreshRoles(); await Refresh(); };
+
         _model = new PersonnelModel(database);
 
         this.WhenAnyValue(x => x.ShowFlightAttendants, x => x.ShowCaptains, x => x.ShowFirstOfficers)
             .Subscribe(_ => TriggerRefresh());
+    
+        TriggerRefreshRoles();
+    }
+
+    private async Task RefreshRoles()
+    {
+        var roles = await _model.GetRoles();
+        InvokeOnUIThread(() => Roles = new ObservableCollection<string>(roles));
     }
 
     private async Task Refresh()
@@ -74,6 +84,6 @@ public class PersonnelViewModel : ViewModelBase
         InvokeOnUIThread(() => Personnel = new ObservableCollection<PersonnelData>(newData));
     }
 
-    private void TriggerRefresh() => Task.Factory.StartNew(
-        async () => await Refresh());
+    private void TriggerRefresh() => Task.Factory.StartNew(Refresh);
+    private void TriggerRefreshRoles() => Task.Factory.StartNew(RefreshRoles);
 }
