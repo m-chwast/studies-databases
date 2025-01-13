@@ -39,6 +39,27 @@ public class PersonnelViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _showFirstOfficers, value, nameof(ShowFirstOfficers));
     }
 
+    private string _newPersonName = "";
+    public string NewPersonName
+    {
+        get => _newPersonName;
+        set => this.RaiseAndSetIfChanged(ref _newPersonName, value, nameof(NewPersonName));
+    }
+
+    private string _newPersonSurname = "";
+    public string NewPersonSurname
+    {
+        get => _newPersonSurname;
+        set => this.RaiseAndSetIfChanged(ref _newPersonSurname, value, nameof(NewPersonSurname));
+    }
+
+    private ObservableCollection<string> _roles = new();
+    public ObservableCollection<string> Roles
+    {
+        get => _roles;
+        private set => this.RaiseAndSetIfChanged(ref _roles, value, nameof(Roles));
+    }
+
     public PersonnelViewModel(IDatabase database)
     {
         _model = new PersonnelModel(database);
