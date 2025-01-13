@@ -77,8 +77,13 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
                 for(int j = 0; j < reader?.FieldCount; j++)
                 {
                     string val = reader.GetValue(j)?.ToString() ?? "";
+                    
                     // sanitize by removing excessive whitespaces
                     val = Regex.Replace(val, @"\s+", " ");
+                    // remove trailing whitespace
+                    if(val[val.Length - 1] == ' ')
+                        val = val.Remove(val.Length - 1);
+
                     row.Add(val);
                 }
                 data.AddRow(row);
