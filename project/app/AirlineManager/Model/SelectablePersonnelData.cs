@@ -8,4 +8,9 @@ public class SelectablePersonnelData : PersonnelData
     {
         IsSelected = false;
     }
+
+    public SelectablePersonnelData(PersonnelData personnelData) : base(personnelData.Id.ToString(), personnelData.FirstName, personnelData.LastName, personnelData.Role)
+    {
+        IsSelected = false;
+    }
 }

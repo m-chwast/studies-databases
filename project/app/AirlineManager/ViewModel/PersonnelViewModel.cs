@@ -95,12 +95,15 @@ public class PersonnelViewModel : ViewModelBase
 
     public PersonnelViewModel(IDatabase database)
     {
-        database.Refresh += async (o,e) => { await RefreshRoles(); await Refresh(); };
+        database.Refresh += async (o,e) => { await RefreshRoles(); await Refresh(); await RefreshPersonsToDelete(); };
 
         _model = new PersonnelModel(database);
 
         this.WhenAnyValue(x => x.ShowFlightAttendants, x => x.ShowCaptains, x => x.ShowFirstOfficers)
             .Subscribe(_ => TriggerRefresh());
+
+        this.WhenAnyValue(x => x.DeletePersonId, x => x.DeletePersonSurname)
+            .Subscribe(_ => TriggerPersonsToDeleteRefresh());
 
         AddPersonCommand = ReactiveCommand.CreateFromTask(AddPerson, 
             this.WhenAnyValue(
@@ -125,6 +128,18 @@ public class PersonnelViewModel : ViewModelBase
         var newData = await _model.GetNewData(ShowFlightAttendants, ShowCaptains, ShowFirstOfficers);
         InvokeOnUIThread(() => Personnel = new ObservableCollection<PersonnelData>(newData));
     }
+
+    private async Task RefreshPersonsToDelete()
+    {
+        bool idParsed = int.TryParse(DeletePersonId, out int id);
+        var persons = await _model.GetFilteredPersonnel(idParsed ? id : null, DeletePersonSurname);
+        ObservableCollection<SelectablePersonnelData> selectablePersons = new();
+        foreach(var person in persons)
+            selectablePersons.Add(new SelectablePersonnelData(person));
+        InvokeOnUIThread(() => DeletePersonnel = selectablePersons);
+    }
+
+    private void TriggerPersonsToDeleteRefresh() => Task.Factory.StartNew(RefreshPersonsToDelete);
 
     private void TriggerRefresh() => Task.Factory.StartNew(Refresh);
     private void TriggerRefreshRoles() => Task.Factory.StartNew(RefreshRoles);

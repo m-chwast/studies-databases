@@ -83,7 +83,7 @@ public class PersonnelModel : ModelBase
         if(id is not null)
             query += $"p.person_id = {id}" + (isSurnameFilter ? " AND " : "");
         if(isSurnameFilter)
-            query += $"p.person_surname LIKE {surname}%";
+            query += $"p.person_surname LIKE '{surname}%'";
 
         query += ";";
 
