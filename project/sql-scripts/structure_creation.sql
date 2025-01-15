@@ -12,7 +12,7 @@ CREATE TABLE aircraft(aircraft_id int, aircraft_type_id int,
 
 CREATE TABLE role(role_id int, role_name char(30),
                   PRIMARY KEY (role_id));
-CREATE TABLE person(person_id int, person_name varchar(30), person_surname varchar(30),
+CREATE TABLE person(person_id int GENERATED ALWAYS AS IDENTITY, person_name varchar(30), person_surname varchar(30),
                     person_role_id int,
                     PRIMARY KEY (person_id),
                     FOREIGN KEY (person_role_id) REFERENCES role(role_id));
