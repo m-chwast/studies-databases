@@ -83,6 +83,51 @@
         </DockPanel>
         </Border>
 
+        <Border BorderBrush="Gray" BorderThickness="1" Margin="10" DockPanel.Dock="Top">
+        <DockPanel LastChildFill="False" Margin="10">
+
+            <TextBlock 
+                Text="Delete person"
+                Margin="5"
+                DockPanel.Dock="Top"/>
+
+            <StackPanel DockPanel.Dock="Top" Margin="5" Orientation="Horizontal">
+
+                <StackPanel Margin="5">
+                    <TextBlock Text="ID Filter"/>
+                    <TextBox Text="{Binding DeletePersonId}" Width="150"/>
+                </StackPanel>
+
+                <StackPanel Margin="5">
+                    <TextBlock Text="Surname Filter"/>
+                    <TextBox Text="{Binding DeletePersonSurname}" Width="150"/>
+                </StackPanel>
+
+            </StackPanel>
+
+            <DataGrid ItemsSource="{Binding DeletePersonnel}"
+                BorderThickness="1"
+                BorderBrush="Gray"
+                GridLinesVisibility="All"
+                IsReadOnly="True"
+                Margin="5">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding FirstName}"/>
+                    <DataGridTextColumn Header="Surname" Binding="{Binding LastName}"/>
+                    <DataGridTextColumn Header="Role" Binding="{Binding Role}"/>
+                    <DataGridCheckBoxColumn Header="Delete" Binding="{Binding IsSelected}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            
+            <Button Margin="5"
+                Command="{Binding DeletePersonCommand}" 
+                Content="Delete Selected"
+                Width="150"/>
+
+        </DockPanel>
+        </Border>
+
     <TextBlock/>
 
     </DockPanel>

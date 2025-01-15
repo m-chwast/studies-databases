@@ -68,6 +68,29 @@ public class PersonnelViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _selectedRole, value, nameof(SelectedRole));
     }
 
+    private string _deletePersonId = "";
+    public string DeletePersonId
+    {
+        get => _deletePersonId;
+        set => this.RaiseAndSetIfChanged(ref _deletePersonId, value, nameof(DeletePersonId));
+    }
+
+    private string _deletePersonSurname = "";
+    public string DeletePersonSurname
+    {
+        get => _deletePersonSurname;
+        set => this.RaiseAndSetIfChanged(ref _deletePersonSurname, value, nameof(DeletePersonSurname));
+    }
+
+    private ObservableCollection<SelectablePersonnelData> _deletePersonnel = new();
+    public ObservableCollection<SelectablePersonnelData> DeletePersonnel
+    {
+        get => _deletePersonnel;
+        private set => this.RaiseAndSetIfChanged(ref _deletePersonnel, value, nameof(DeletePersonnel));
+    }
+
+    public ReactiveCommand<Unit, Unit> DeletePersonCommand { get; }
+
     public ReactiveCommand<Unit, Unit> AddPersonCommand { get; }
 
     public PersonnelViewModel(IDatabase database)
@@ -85,7 +108,9 @@ public class PersonnelViewModel : ViewModelBase
             (a, b, c) => !string.IsNullOrWhiteSpace(a) 
             && !string.IsNullOrWhiteSpace(b)
             && !string.IsNullOrWhiteSpace(c)));
-    
+
+        DeletePersonCommand = ReactiveCommand.CreateFromTask(DeletePerson);
+
         TriggerRefreshRoles();
     }
 
@@ -105,6 +130,11 @@ public class PersonnelViewModel : ViewModelBase
     private void TriggerRefreshRoles() => Task.Factory.StartNew(RefreshRoles);
 
     private async Task AddPerson() 
+    {
+        await Task.CompletedTask;
+    }
+
+    private async Task DeletePerson()
     {
         await Task.CompletedTask;
     }
