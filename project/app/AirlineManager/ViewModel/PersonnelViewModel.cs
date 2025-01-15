@@ -131,7 +131,18 @@ public class PersonnelViewModel : ViewModelBase
 
     private async Task AddPerson() 
     {
-        await Task.CompletedTask;
+        bool added = await _model.AddPerson(NewPersonName, NewPersonSurname, SelectedRole);
+        if(added)
+        {
+            Console.WriteLine("Person added successfully");
+            NewPersonName = "";
+            NewPersonSurname = "";
+            TriggerRefresh();
+        }
+        else 
+        {
+            Console.WriteLine("Failed to add person");
+        }
     }
 
     private async Task DeletePerson()

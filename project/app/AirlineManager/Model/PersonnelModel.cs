@@ -16,7 +16,7 @@ public class PersonnelModel : ModelBase
     {
         List<PersonnelData> personnel = new();
 
-        string query = GetQuery(flightAttendants, captains, firstOfficers);
+        string query = GetPersonnelQuery(flightAttendants, captains, firstOfficers);
         var dataTable = await _database.GetData(query);
 
         foreach(var row in dataTable.Data)
@@ -44,7 +44,16 @@ public class PersonnelModel : ModelBase
         return roles;
     }
 
-    private string GetQuery(bool flightAttendants, bool captains, bool firstOfficers)
+    public async Task<bool> AddPerson(string name, string surname, string role)
+    {
+        string query = $@"
+            INSERT INTO airline.person (person_name, person_surname, person_role_id)
+            VALUES ('{name}', '{surname}', (SELECT role_id FROM airline.role WHERE role_name = '{role}'));";
+
+        return await _database.ExecuteQuery(query);
+    }
+
+    private string GetPersonnelQuery(bool flightAttendants, bool captains, bool firstOfficers)
     {
         string query = @"
             SELECT p.person_id, p.person_name, p.person_surname, r.role_name
