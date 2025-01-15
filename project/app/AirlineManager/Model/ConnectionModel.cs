@@ -63,11 +63,26 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
         _dataSource = NpgsqlDataSource.Create(_ConnectionString);
     }
 
+    public async Task<bool> ExecuteQuery(string query)
+    {
+        IncrementTotalQueryCount();
+        try
+        {
+            await using var cmd = _dataSource.CreateCommand(query);
+            await cmd.ExecuteNonQueryAsync();
+
+            IncrementSuccessfulQueryCount();
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     public async Task<DataTable> GetData(string query, bool logResult = true)
     {
-        _queryCountMutex.WaitOne();
-        DatabaseQueriesTotal++;
-        _queryCountMutex.ReleaseMutex();
+        IncrementTotalQueryCount();
 
         bool querySuccess = true;
         DataTable data = new();
@@ -110,16 +125,26 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
         }
 
         if(querySuccess)
-        {
-            _queryCountMutex.WaitOne();
-            DatabaseQueriesSuccessful++;
-            _queryCountMutex.ReleaseMutex();
-        }
+            IncrementSuccessfulQueryCount();
 
         if(logResult)
             Console.WriteLine(data);
 
         return data;
+    }
+
+    private void IncrementTotalQueryCount()
+    {
+        _queryCountMutex.WaitOne();
+        DatabaseQueriesTotal++;
+        _queryCountMutex.ReleaseMutex();
+    }
+
+    private void IncrementSuccessfulQueryCount()
+    {
+        _queryCountMutex.WaitOne();
+        DatabaseQueriesSuccessful++;
+        _queryCountMutex.ReleaseMutex();
     }
 
     private void DatabaseRefresh()
