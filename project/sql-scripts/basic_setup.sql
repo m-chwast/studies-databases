@@ -20,6 +20,7 @@ INSERT INTO airline.role VALUES
 GRANT USAGE ON SCHEMA airline TO db_user_1;
 -- adding permissions to read all tables for the user
 GRANT SELECT ON ALL TABLES IN SCHEMA airline TO db_user_1;
+GRANT INSERT ON person TO db_user_1;
 
 -- getting all users in db - helper
 -- SELECT * FROM pg_catalog.pg_user;
