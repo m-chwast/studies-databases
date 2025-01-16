@@ -155,12 +155,14 @@ public class PersonnelViewModel : ViewModelBase
             Console.WriteLine("Person added successfully");
             NewPersonName = "";
             NewPersonSurname = "";
-            TriggerRefresh();
         }
         else 
         {
             Console.WriteLine("Failed to add person");
         }
+
+        TriggerRefresh();
+        TriggerPersonsToDeleteRefresh();
     }
 
     private async Task DeletePerson()
@@ -171,5 +173,8 @@ public class PersonnelViewModel : ViewModelBase
             Console.WriteLine("Person deleted successfully");
         else
             Console.WriteLine("Failed to delete person");
+        
+        TriggerPersonsToDeleteRefresh();
+        TriggerRefresh();
     }
 }
