@@ -109,7 +109,6 @@
                 BorderThickness="1"
                 BorderBrush="Gray"
                 GridLinesVisibility="All"
-                IsReadOnly="True"
                 Margin="5">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>

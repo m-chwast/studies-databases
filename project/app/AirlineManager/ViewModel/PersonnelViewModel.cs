@@ -1,5 +1,8 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -162,6 +165,11 @@ public class PersonnelViewModel : ViewModelBase
 
     private async Task DeletePerson()
     {
-        await Task.CompletedTask;
+        IEnumerable<int> selectedId = DeletePersonnel.Where(x => x.IsSelected).Select(x => x.Id);
+        bool deleted = await _model.DeletePersons(selectedId);
+        if(deleted)
+            Console.WriteLine("Person deleted successfully");
+        else
+            Console.WriteLine("Failed to delete person");
     }
 }

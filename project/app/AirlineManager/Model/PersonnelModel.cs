@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AirlineManager.Model;
@@ -68,6 +69,18 @@ public class PersonnelModel : ModelBase
             VALUES ('{name}', '{surname}', (SELECT role_id FROM airline.role WHERE role_name = '{role}'));";
 
         return await _database.ExecuteQuery(query);
+    }
+
+    public Task<bool> DeletePersons(IEnumerable<int> ids)
+    {
+        if(ids.Count() == 0)
+            return Task.FromResult(true);
+
+        string query = $@"
+            DELETE FROM airline.person
+            WHERE person_id IN ({string.Join(',', ids)});";
+
+        return _database.ExecuteQuery(query);
     }
 
     private string GetFilteredPersonnelQuery(int? id, string? surname)
