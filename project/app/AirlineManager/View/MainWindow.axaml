@@ -27,6 +27,12 @@
 					DataContext="{Binding PersonnelVM, Mode=OneWay}"/>
 			</TabItem>	
 
+			<TabItem Header="Routes">
+				<v:RoutesView 
+					x:Name="RoutesView"
+					DataContext="{Binding RoutesVM, Mode=OneWay}"/>
+			</TabItem>
+
 		</TabControl>
 
 		<v:ConnectionView 
