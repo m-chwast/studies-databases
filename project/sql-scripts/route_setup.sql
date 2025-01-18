@@ -26,11 +26,23 @@ BEGIN
  END;
  $$;
 
-CREATE OR REPLACE PROCEDURE get_routes()
+
+
+CREATE OR REPLACE FUNCTION get_routes()
+  RETURNS TABLE (
+  route_id int,
+  departure char(4),
+  destination char(4),
+  flight_time float
+  )
 LANGUAGE plpgsql
 AS
 $$
 BEGIN
-
-END;
+  RETURN QUERY SELECT r.route_id, dep_a.airport_designator departure, dest_a.airport_designator destination, r.flight_time
+  FROM airline.route r
+  JOIN airline.airport dest_a ON r.arrival_airport_id = dest_a.airport_id
+  JOIN airline.airport dep_a ON r.departure_airport_id = dep_a.airport_id;
+  RETURN;
+  END;
 $$;
