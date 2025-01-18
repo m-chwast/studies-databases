@@ -7,46 +7,69 @@
              x:DataType="vm:RoutesViewModel"
 			 x:Class="AirlineManager.View.RoutesView">
 
-	<DockPanel LastChildFill="False" Margin="10">
-	     
-        <Border BorderBrush="Gray" BorderThickness="1" Padding="5" DockPanel.Dock="Top">
-        <DockPanel> 
-            <TextBlock Text="Add Route" DockPanel.Dock="Top"/>
-            <StackPanel Orientation="Horizontal" Spacing="10">
-                <StackPanel>
-                    <TextBlock Text="Departure"/>
-                    <TextBox Width="150"/>
+    <StackPanel Orientation="Horizontal">
+
+        <DockPanel LastChildFill="False" Margin="10">
+            
+            <Border BorderBrush="Gray" BorderThickness="1" Padding="5" DockPanel.Dock="Top">
+            <DockPanel> 
+                <TextBlock Text="Add Route" DockPanel.Dock="Top"/>
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <StackPanel>
+                        <TextBlock Text="Departure"/>
+                        <TextBox Width="150"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Destination"/>
+                        <TextBox Width="150"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Flight Time"/>
+                        <NumericUpDown Width="150" ShowButtonSpinner="False"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text=" "/>
+                        <Button Content="Add" Width="150"/>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel>
-                    <TextBlock Text="Destination"/>
-                    <TextBox Width="150"/>
-                </StackPanel>
-                <StackPanel>
-                    <TextBlock Text="Flight Time"/>
-                    <NumericUpDown Width="150" ShowButtonSpinner="False"/>
-                </StackPanel>
-                <StackPanel>
-                    <TextBlock Text=" "/>
-                    <Button Content="Add" Width="150"/>
-                </StackPanel>
-            </StackPanel>
+            </DockPanel>
+            </Border> 
+
+            <DataGrid ItemsSource="{Binding Routes}"
+                Margin="0,10"
+                BorderThickness="1"
+                BorderBrush="Gray"
+                GridLinesVisibility="All">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
+                    <DataGridTextColumn Header="Departure" Binding="{Binding Departure}" />
+                    <DataGridTextColumn Header="Destination" Binding="{Binding Destination}"/>
+                    <DataGridTextColumn Header="Flight Time" Binding="{Binding FlightTime}"/>
+                    <DataGridCheckBoxColumn Header="Delete" Binding="{Binding IsSelected}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
         </DockPanel>
-        </Border> 
 
-        <DataGrid ItemsSource="{Binding Routes}"
-            Margin="0,10"
-            BorderThickness="1"
-            BorderBrush="Gray"
-            GridLinesVisibility="All">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="Departure" Binding="{Binding Departure}" />
-                <DataGridTextColumn Header="Destination" Binding="{Binding Destination}"/>
-                <DataGridTextColumn Header="Flight Time" Binding="{Binding FlightTime}"/>
-                <DataGridCheckBoxColumn Header="Delete" Binding="{Binding IsSelected}"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <Border BorderBrush="Gray" BorderThickness="1" Padding="5" Margin="10">
+        <StackPanel>
 
-    </DockPanel>
+            <TextBlock Text="Available Airports"/>
+
+            <DataGrid ItemsSource="{Binding Airports}"
+                Margin="0,10"
+                BorderThickness="1"
+                BorderBrush="Gray"
+                GridLinesVisibility="All">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Designator" Binding="{Binding Designator}" />
+                    <DataGridTextColumn Header="Name" Binding="{Binding LongName}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </StackPanel>
+        </Border>
+
+    </StackPanel>
 
 </UserControl>

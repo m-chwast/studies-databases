@@ -36,6 +36,13 @@ public class RoutesViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _newRouteTime, value, nameof(NewRouteTime));
     }
 
+    private ObservableCollection<AirportData> _airports = new();
+    public ObservableCollection<AirportData> Airports
+    {
+        get => _airports;
+        private set => this.RaiseAndSetIfChanged(ref _airports, value, nameof(Airports));
+    }
+
     public RoutesViewModel(IDatabase database)
     {
         database.Refresh += (o,e) => Refresh();
