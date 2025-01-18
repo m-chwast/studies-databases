@@ -17,19 +17,19 @@
                 <StackPanel Orientation="Horizontal" Spacing="10">
                     <StackPanel>
                         <TextBlock Text="Departure"/>
-                        <TextBox Width="150"/>
+                        <TextBox Width="150" Text="{Binding NewRouteDeparture}"/>
                     </StackPanel>
                     <StackPanel>
                         <TextBlock Text="Destination"/>
-                        <TextBox Width="150"/>
+                        <TextBox Width="150" Text="{Binding NewRouteDestination}"/>
                     </StackPanel>
                     <StackPanel>
                         <TextBlock Text="Flight Time"/>
-                        <NumericUpDown Width="150" ShowButtonSpinner="False"/>
+                        <NumericUpDown Width="150" ShowButtonSpinner="False" Value="{Binding NewRouteTime}"/>
                     </StackPanel>
                     <StackPanel>
                         <TextBlock Text=" "/>
-                        <Button Content="Add" Width="150"/>
+                        <Button Content="Add" Width="150" Command="{Binding AddRouteCommand}"/>
                     </StackPanel>
                 </StackPanel>
             </DockPanel>

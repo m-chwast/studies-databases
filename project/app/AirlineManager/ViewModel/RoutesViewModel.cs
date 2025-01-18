@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Reactive;
 using System.Threading.Tasks;
 using AirlineManager.Model;
 using ReactiveUI;
@@ -45,21 +46,47 @@ public class RoutesViewModel : ViewModelBase
         private set => this.RaiseAndSetIfChanged(ref _airports, value, nameof(Airports));
     }
 
+    public ReactiveCommand<Unit, Unit> AddRouteCommand { get; }
+
     public RoutesViewModel(IDatabase database)
     {
         database.Refresh += (o,e) => Refresh();
 
         _model = new RoutesModel(database);
 
+        AddRouteCommand = ReactiveCommand.CreateFromTask(AddRoute,
+            this.WhenAnyValue(
+                x => x.NewRouteDeparture,
+                x => x.NewRouteDestination,
+                x => x.NewRouteTime,
+                (departure, destination, time) => 
+                !string.IsNullOrEmpty(departure) 
+                && !string.IsNullOrEmpty(destination) 
+                && time > 0));
+
         Refresh();
+    }
+
+    private async Task AddRoute()
+    {
+        await _model.AddRoute(NewRouteDeparture, NewRouteDestination, NewRouteTime);
+        TriggerRefreshRoutes();
     }
 
     private void Refresh()
     {
+        TriggerRefreshRoutes();
         TriggerRefreshAirports();
     }
 
+    private void TriggerRefreshRoutes() => Task.Factory.StartNew(RefreshRoutes);
     private void TriggerRefreshAirports() => Task.Factory.StartNew(RefreshAirports);
+
+    private async Task RefreshRoutes()
+    {
+        var newRoutes = await _model.GetRoutes();
+        InvokeOnUIThread(() => Routes = new ObservableCollection<RouteData>(newRoutes));
+    }
 
     private async Task RefreshAirports()
     {
