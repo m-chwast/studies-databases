@@ -48,6 +48,8 @@ public class RoutesViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> AddRouteCommand { get; }
 
+    public ReactiveCommand<Unit, Unit> DeleteSelectedCommand { get; }
+
     public RoutesViewModel(IDatabase database)
     {
         database.Refresh += (o,e) => Refresh();
@@ -64,12 +66,25 @@ public class RoutesViewModel : ViewModelBase
                 && !string.IsNullOrEmpty(destination) 
                 && time > 0));
 
+        DeleteSelectedCommand = ReactiveCommand.CreateFromTask(DeleteSelected);
+
         Refresh();
     }
 
     private async Task AddRoute()
     {
         await _model.AddRoute(NewRouteDeparture, NewRouteDestination, NewRouteTime);
+        TriggerRefreshRoutes();
+    }
+
+    private async Task DeleteSelected()
+    {
+        foreach(var route in Routes)
+        {
+            if(route.IsSelected)
+                await _model.DeleteRoute(route.Id);
+        }
+
         TriggerRefreshRoutes();
     }
 

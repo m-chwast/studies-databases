@@ -6,7 +6,7 @@ public class RouteData
     public string Departure { get; }
     public string Destination { get; }
     public float FlightTime { get; }
-    public bool IsSelected { get; }
+    public bool IsSelected { get; set; }
 
     public RouteData(string id, string departure, string destination, string flightTime, bool isSelected = false)
     {

@@ -54,4 +54,11 @@ public class RoutesModel : ModelBase
             CALL airline.insert_route('{departure}', '{destination}', {time});";
         await _database.ExecuteQuery(query);
     }
+
+    public async Task DeleteRoute(int id)
+    {
+        string query = $@"
+            CALL airline.delete_route({id});";
+        await _database.ExecuteQuery(query);
+    }
 }
