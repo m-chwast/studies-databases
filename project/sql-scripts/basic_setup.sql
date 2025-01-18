@@ -24,6 +24,11 @@ GRANT SELECT ON ALL TABLES IN SCHEMA airline TO db_user_1;
 GRANT INSERT ON person TO db_user_1;
 GRANT DELETE ON person TO db_user_1;
 
+-- grant permissions for route procedures/functions
+GRANT EXECUTE ON PROCEDURE airline.insert_route TO db_user_1;
+GRANT EXECUTE ON FUNCTION airline.get_routes TO db_user_1;
+
+
 -- getting all users in db - helper
 -- SELECT * FROM pg_catalog.pg_user;
 

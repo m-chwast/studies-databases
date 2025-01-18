@@ -34,9 +34,7 @@ public class RoutesModel : ModelBase
     public async Task<IEnumerable<RouteData>> GetRoutes()
     {
         const string query = @"
-            SELECT r.route_id, r.route_departure, r.route_destination, r.route_time
-            FROM airline.route r
-            ORDER BY r.route_time;";
+            SELECT * FROM airline.get_routes();";
 
         var dataTable = await _database.GetData(query);
 
@@ -53,9 +51,7 @@ public class RoutesModel : ModelBase
     public async Task AddRoute(string departure, string destination, float time)
     {
         string query = $@"
-            INSERT INTO airline.route (route_departure, route_destination, route_time)
-            VALUES ('{departure}', '{destination}', {time});";
-
+            CALL airline.insert_route('{departure}', '{destination}', {time});";
         await _database.ExecuteQuery(query);
     }
 }

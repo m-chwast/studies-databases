@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE insert_route(
+CREATE OR REPLACE PROCEDURE airline.insert_route(
   departure airline.airport.airport_designator%TYPE, 
   destination airline.airport.airport_designator%TYPE,
   flight_time airline.route.flight_time%TYPE
@@ -28,7 +28,7 @@ BEGIN
 
 
 
-CREATE OR REPLACE FUNCTION get_routes()
+CREATE OR REPLACE FUNCTION airline.get_routes()
   RETURNS TABLE (
   route_id int,
   departure char(4),
