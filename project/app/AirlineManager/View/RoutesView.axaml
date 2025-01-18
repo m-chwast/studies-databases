@@ -15,15 +15,15 @@
             <StackPanel Orientation="Horizontal" Spacing="10">
                 <StackPanel>
                     <TextBlock Text="Departure"/>
-                    <ComboBox Width="150"/>
+                    <TextBox Width="150"/>
                 </StackPanel>
                 <StackPanel>
                     <TextBlock Text="Destination"/>
-                    <ComboBox Width="150"/>
+                    <TextBox Width="150"/>
                 </StackPanel>
                 <StackPanel>
                     <TextBlock Text="Flight Time"/>
-                    <TextBox Width="150"/>
+                    <NumericUpDown Width="150" ShowButtonSpinner="False"/>
                 </StackPanel>
                 <StackPanel>
                     <TextBlock Text=" "/>
