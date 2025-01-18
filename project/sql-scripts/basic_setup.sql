@@ -27,6 +27,7 @@ GRANT DELETE ON person TO db_user_1;
 -- grant permissions for route procedures/functions
 GRANT EXECUTE ON PROCEDURE airline.insert_route TO db_user_1;
 GRANT EXECUTE ON FUNCTION airline.get_routes TO db_user_1;
+GRANT EXECUTE ON PROCEDURE airline.delete_route TO db_user_1;
 
 
 -- getting all users in db - helper

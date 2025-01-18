@@ -46,3 +46,15 @@ BEGIN
   RETURN;
   END;
 $$;
+
+
+CREATE OR REPLACE PROCEDURE airline.delete_route(
+  route_to_delete_id int)
+LANGUAGE plpgsql
+AS
+$$  
+BEGIN
+  DELETE FROM airline.route r WHERE r.route_id = route_to_delete_id;
+END;
+$$;
+
