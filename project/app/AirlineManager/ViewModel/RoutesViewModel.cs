@@ -1,4 +1,6 @@
+using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using AirlineManager.Model;
 using ReactiveUI;
 
@@ -48,10 +50,20 @@ public class RoutesViewModel : ViewModelBase
         database.Refresh += (o,e) => Refresh();
 
         _model = new RoutesModel(database);
+
+        Refresh();
     }
 
     private void Refresh()
     {
-        
+        TriggerRefreshAirports();
+    }
+
+    private void TriggerRefreshAirports() => Task.Factory.StartNew(RefreshAirports);
+
+    private async Task RefreshAirports()
+    {
+        var newAirports = await _model.GetAirports();
+        InvokeOnUIThread(() => Airports = new ObservableCollection<AirportData>(newAirports));
     }
 }
