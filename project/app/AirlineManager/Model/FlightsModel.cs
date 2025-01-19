@@ -66,4 +66,10 @@ public class FlightModel : ModelBase
         string query = $@"CALL airline.add_person_to_flight({flightId}, {personId});";
         await _database.ExecuteQuery(query);
     }
+
+    public async Task RemovePersonFromCrew(int flightId, int personId)
+    {
+        string query = $@"CALL airline.remove_person_from_flight({flightId}, {personId});";
+        await _database.ExecuteQuery(query);
+    } 
 }

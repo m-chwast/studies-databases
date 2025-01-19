@@ -73,12 +73,12 @@
 
             <StackPanel Orientation="Horizontal">
                 <StackPanel Spacing="5">
-                    <TextBlock Text="Person ID"/>
+                    <TextBlock Text="New Person ID"/>
                     <TextBox Text="{Binding NewPersonId}" Width="75"/>
                 </StackPanel>
                 <StackPanel>
-                    <TextBlock/>
                     <Button Content="Add Person To Crew" Command="{Binding AddPersonToCrewCommand}"/>
+                    <Button Content="Remove Person From Crew" Command="{Binding RemovePersonFromCrewCommand}"/>
                 </StackPanel>
 
             </StackPanel>

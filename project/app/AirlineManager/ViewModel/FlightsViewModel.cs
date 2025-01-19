@@ -47,6 +47,8 @@ public class FlightsViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> AddPersonToCrewCommand { get; }
 
+    public ReactiveCommand<Unit, Unit> RemovePersonFromCrewCommand { get; }
+
     public FlightsViewModel(IDatabase database)
     {
         database.Refresh += (o,e) => Refresh();
@@ -63,6 +65,9 @@ public class FlightsViewModel : ViewModelBase
         AddPersonToCrewCommand = ReactiveCommand.CreateFromTask(AddPersonToCrew,
             this.WhenAnyValue(x => x.NewPersonId, (person) => !string.IsNullOrEmpty(person)));
 
+        RemovePersonFromCrewCommand = ReactiveCommand.CreateFromTask(RemovePersonFromCrew,
+            this.WhenAnyValue(x => x.NewPersonId, (person) => !string.IsNullOrEmpty(person)));
+
         _flightDetailsVisible = this.WhenAnyValue(x => x.SelectedFlight)
             .Select(x => x is not null)
             .ToProperty(this, x => x.FlightDetailsVisible);
@@ -71,6 +76,19 @@ public class FlightsViewModel : ViewModelBase
             .Subscribe(async _ => await RefreshFlightDetails());
 
         TriggerRefreshFlights();
+    }
+
+    private async Task RemovePersonFromCrew()
+    {
+        if (SelectedFlight is null)
+            return;
+        if (SelectedFlight.Id == 0)
+            return;
+        if (!int.TryParse(NewPersonId, out int personId))
+            return;
+
+        await _model.RemovePersonFromCrew(SelectedFlight.Id, personId);
+        await RefreshFlightDetails();
     }
 
     private async Task AddPersonToCrew()
