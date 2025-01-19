@@ -39,7 +39,7 @@ public class FlightModel : ModelBase
 
     public async Task AddFlight(string route, string date, string aircraft)
     {
-        string query = $@"CALL airline.add_flight('{route}', '{date}', {aircraft});";
+        string query = $@"CALL airline.insert_flight({route}, '{date}', {aircraft});";
         await _database.ExecuteQuery(query);
     }
 }

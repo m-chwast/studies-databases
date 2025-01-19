@@ -72,3 +72,4 @@ BEGIN
  $$;
  
  GRANT EXECUTE ON PROCEDURE airline.insert_flight TO db_user_1;
+ GRANT INSERT ON airline.flight TO db_user_1;
