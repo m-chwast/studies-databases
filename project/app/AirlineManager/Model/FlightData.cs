@@ -28,8 +28,8 @@ public class FlightData : ModelBase
         set => this.RaiseAndSetIfChanged(ref _aircraft, value, nameof(Aircraft)); 
     }
 
-    private ObservableCollection<int> _crew = new();
-    public ObservableCollection<int> Crew 
+    private ObservableCollection<PersonnelData> _crew = new();
+    public ObservableCollection<PersonnelData> Crew 
     {
         get => _crew;
         set => this.RaiseAndSetIfChanged(ref _crew, value, nameof(Crew));

@@ -39,9 +39,9 @@
                 GridLinesVisibility="All"
                 SelectedItem="{Binding SelectedFlight, Mode=TwoWay}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
-                    <DataGridTextColumn Header="Route" Binding="{Binding Route}" />
-                    <DataGridTextColumn Header="Date" Binding="{Binding Date}"/>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Route" Binding="{Binding Route}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Date" Binding="{Binding Date}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
 
@@ -70,6 +70,19 @@
                 <TextBlock Text="Aircraft Details:"/>
                 <TextBlock Text="{Binding SelectedFlight.AircraftDetails}"/>
             </StackPanel>
+
+            <DataGrid ItemsSource="{Binding SelectedFlight.Crew}"
+                Margin="0,10"
+                BorderThickness="1"
+                BorderBrush="Gray"
+                GridLinesVisibility="All">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding FirstName}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Surname" Binding="{Binding LastName}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Passport" Binding="{Binding Role}" IsReadOnly="True"/>
+                </DataGrid.Columns>
+            </DataGrid>
 
         </StackPanel>
         </Border>
