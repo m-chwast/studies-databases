@@ -9,3 +9,36 @@ GRANT SELECT ON airline.flights_view TO db_user_1;
 INSERT INTO airline.flight (route_id, aircraft_id, flight_date) VALUES
 (6, 1, '2025-1-20 11:00');
 
+
+
+
+DROP FUNCTION airline.get_flight_details;
+
+CREATE OR REPLACE FUNCTION airline.get_flight_details(selected_flight_id int)
+  RETURNS TABLE (
+  aircraft_id int,
+  aircraft_type airline.aircraft_type.aircraft_type_name%TYPE,
+  route text
+  )
+LANGUAGE plpgsql
+AS
+$$
+BEGIN
+  RETURN QUERY 
+  SELECT f.aircraft_id, at.aircraft_type_name, dep_a.airport_designator || '-' || dest_a.airport_designator
+  FROM airline.flight f
+  
+  JOIN airline.aircraft ac ON f.aircraft_id = ac.aircraft_id
+  JOIN airline.aircraft_type at ON ac.aircraft_type_id = at.aircraft_type_id
+  
+  JOIN airline.route r ON f.route_id = r.route_id
+  JOIN airline.airport dep_a ON r.departure_airport_id = dep_a.airport_id
+  JOIN airline.airport dest_a ON r.arrival_airport_id = dest_a.airport_id
+  
+  WHERE f.flight_id = selected_flight_id;
+  
+  RETURN;
+  END;
+$$;
+
+GRANT EXECUTE ON FUNCTION airline.get_flight_details TO db_user_1;
