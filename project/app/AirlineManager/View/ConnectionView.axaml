@@ -19,6 +19,8 @@
 
         <TextBlock Text="{Binding DatabaseStats}" Margin="0,10"/>
 
+        <TextBlock Text="{Binding ExceptionMessage}" Margin="0,10"/>
+
     </StackPanel>
 
 </UserControl>
