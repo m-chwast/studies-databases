@@ -102,9 +102,11 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
                     // sanitize by removing excessive whitespaces
                     val = Regex.Replace(val, @"\s+", " ");
                     // remove trailing whitespace
-                    if(val[val.Length - 1] == ' ')
-                        val = val.Remove(val.Length - 1);
-
+                    if(val.Length > 0)
+                    {
+                        if(val[val.Length - 1] == ' ')
+                            val = val.Remove(val.Length - 1);
+                    }
                     row.Add(val);
                 }
                 data.AddRow(row);
