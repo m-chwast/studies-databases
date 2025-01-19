@@ -32,6 +32,17 @@
                 </StackPanel>
             </StackPanel>    
 
+            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,10">
+                <StackPanel>
+                    <TextBlock Text="Flight To Delete:"/>
+                    <TextBox Text="{Binding FlightToDelete}" Width="150"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock/>
+                    <Button Content="Delete" Command="{Binding DeleteFlightCommand}" Width="75"/>
+                </StackPanel>
+            </StackPanel>
+
             <DataGrid ItemsSource="{Binding Flights}"
                 Margin="0,10"
                 BorderThickness="1"
