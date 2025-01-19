@@ -80,8 +80,8 @@ BEGIN
  GRANT INSERT ON airline.flight_crew TO db_user_1;
 
 CREATE OR REPLACE PROCEDURE airline.add_person_to_flight(
-  flight_id int, 
-  person_id int
+  flight int, 
+  person int
 )
 LANGUAGE plpgsql
 AS
@@ -90,18 +90,18 @@ DECLARE
   tmp_id integer;
   
 BEGIN
-  SELECT FROM airline.flight f WHERE f.flight_id = flight_id INTO tmp_id;
+  SELECT FROM airline.flight f WHERE f.flight_id = flight INTO tmp_id;
   IF NOT FOUND THEN
-    RAISE EXCEPTION 'Flight % not in database', flight_id;
+    RAISE EXCEPTION 'Flight % not in database', flight;
   END IF;
 
-  SELECT FROM airline.person p WHERE p.person_id = person_id INTO tmp_id;
+  SELECT FROM airline.person p WHERE p.person_id = person INTO tmp_id;
   IF NOT FOUND THEN
-    RAISE EXCEPTION 'Person % not in database', person_id;
+    RAISE EXCEPTION 'Person % not in database', person;
   END IF;
    
   INSERT INTO airline.flight_crew (flight_id, person_id) 
-  VALUES (flight_id, person_id);
+  VALUES (flight, person);
  END;
  $$;
  
