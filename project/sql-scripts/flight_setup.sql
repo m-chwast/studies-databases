@@ -123,3 +123,7 @@ $$;
 GRANT EXECUTE ON PROCEDURE airline.remove_person_from_flight TO db_user_1;
 GRANT DELETE ON airline.flight_crew TO db_user_1;
 
+
+
+GRANT DELETE ON airline.flight TO db_user_1;
+
