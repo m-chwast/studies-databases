@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using AirlineManager.Model;
 using ReactiveUI;
@@ -34,6 +35,9 @@ public class FlightsViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> AddFlightCommand { get; }
 
+    private ObservableAsPropertyHelper<bool> _flightDetailsVisible;
+    public bool FlightDetailsVisible => _flightDetailsVisible.Value;
+
     public FlightsViewModel(IDatabase database)
     {
         database.Refresh += (o,e) => Refresh();
@@ -46,6 +50,10 @@ public class FlightsViewModel : ViewModelBase
             !string.IsNullOrWhiteSpace(route) 
             && !string.IsNullOrWhiteSpace(date)
             && !string.IsNullOrWhiteSpace(aircraft.ToString())));
+
+        _flightDetailsVisible = this.WhenAnyValue(x => x.SelectedFlight)
+            .Select(x => x is not null)
+            .ToProperty(this, x => x.FlightDetailsVisible);
 
         this.WhenAnyValue(x => x.SelectedFlight)
             .Subscribe(async _ => await RefreshFlightDetails());
