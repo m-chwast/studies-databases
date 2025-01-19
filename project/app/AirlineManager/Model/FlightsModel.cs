@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace AirlineManager.Model;
@@ -35,6 +36,23 @@ public class FlightModel : ModelBase
         flight.Aircraft = row[0];   
         flight.AircraftDetails = row[1];
         flight.RouteDetails = row[2];
+
+        string personnelQuery = $@"
+        SELECT p.person_id, p.person_name, p.person_surname, r.role_name
+        FROM airline.flight f
+        JOIN airline.flight_crew fc ON f.flight_id = fc.flight_id
+        JOIN airline.person p ON p.person_id = fc.person_id
+        JOIN airline.role r ON r.role_id = p.person_role_id
+        WHERE f.flight_id = {flight.Id};";
+
+        var personnelData = await _database.GetData(personnelQuery);
+        List<PersonnelData> personnel = new();
+        foreach (var personnelRow in personnelData.Data)
+        {
+            PersonnelData person = new(personnelRow[0], personnelRow[1], personnelRow[2], personnelRow[3]);
+            personnel.Add(person);
+        }
+        flight.Crew = new ObservableCollection<PersonnelData>(personnel);
     }
 
     public async Task AddFlight(string route, string date, string aircraft)

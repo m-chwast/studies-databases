@@ -120,6 +120,7 @@ public class FlightsViewModel : ViewModelBase
             SelectedFlight.Aircraft = detailedFlight.Aircraft;
             SelectedFlight.AircraftDetails = detailedFlight.AircraftDetails;
             SelectedFlight.RouteDetails = detailedFlight.RouteDetails;
+            SelectedFlight.Crew = detailedFlight.Crew;
         });
     }    
 }
