@@ -21,8 +21,8 @@ public class FlightData : ModelBase
         set => this.RaiseAndSetIfChanged(ref _date, value, nameof(Date));
     }
 
-    private int _aircraft = 0;
-    public int Aircraft 
+    private string _aircraft = string.Empty;
+    public string Aircraft 
     { 
         get => _aircraft; 
         set => this.RaiseAndSetIfChanged(ref _aircraft, value, nameof(Aircraft)); 

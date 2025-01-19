@@ -41,10 +41,11 @@ public class FlightsViewModel : ViewModelBase
         _model = new FlightModel(database);
     
         AddFlightCommand = ReactiveCommand.CreateFromTask(AddFlight, 
-            this.WhenAnyValue(x => x.NewFlight.Route, x => x.NewFlight.Date, 
-            (route, date) => 
+            this.WhenAnyValue(x => x.NewFlight.Route, x => x.NewFlight.Date, x => x.NewFlight.Aircraft, 
+            (route, date, aircraft) => 
             !string.IsNullOrWhiteSpace(route) 
-            && !string.IsNullOrWhiteSpace(date)));
+            && !string.IsNullOrWhiteSpace(date)
+            && !string.IsNullOrWhiteSpace(aircraft.ToString())));
 
         this.WhenAnyValue(x => x.SelectedFlight)
             .Subscribe(async _ => await RefreshFlightDetails());
@@ -54,7 +55,7 @@ public class FlightsViewModel : ViewModelBase
 
     private async Task AddFlight()
     {
-        await _model.AddFlight(NewFlight.Route, NewFlight.Date);
+        await _model.AddFlight(NewFlight.Route, NewFlight.Date, NewFlight.Aircraft);
         TriggerRefreshFlights();
     }
 

@@ -32,14 +32,14 @@ public class FlightModel : ModelBase
         if(data.RowCount == 0)
             return;
         var row = data.Data[0];
-        flight.Aircraft = int.Parse(row[0]);   
+        flight.Aircraft = row[0];   
         flight.AircraftDetails = row[1];
         flight.RouteDetails = row[2];
     }
 
-    public async Task AddFlight(string route, string date)
+    public async Task AddFlight(string route, string date, string aircraft)
     {
-        string query = $@"CALL airline.add_flight('{route}', '{date}')";
+        string query = $@"CALL airline.add_flight('{route}', '{date}', {aircraft});";
         await _database.ExecuteQuery(query);
     }
 }
