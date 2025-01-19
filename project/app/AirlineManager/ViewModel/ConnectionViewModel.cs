@@ -14,6 +14,9 @@ public class ConnectionViewModel : ViewModelBase
     private ObservableAsPropertyHelper<string> _databaseStats;
     public string DatabaseStats => _databaseStats.Value;
 
+    private ObservableAsPropertyHelper<string> _exceptionMessage;
+    public string ExceptionMessage => _exceptionMessage.Value;
+
     public ConnectionViewModel()
     {
         _connectionStatus = this
@@ -26,6 +29,11 @@ public class ConnectionViewModel : ViewModelBase
             x => x._connectionModel.DatabaseQueriesSuccessful)
             .Select(x => GetDatabaseStatsString(x.Item1, x.Item2))
             .ToProperty(this, x => x.DatabaseStats);
+
+        _exceptionMessage = this
+            .WhenAnyValue(x => x._connectionModel.ExceptionMessage)
+            .Select(x => "Last database exception message: " + x)
+            .ToProperty(this, x => x.ExceptionMessage);
     }
 
     private string GetDatabaseStatsString(int total, int success)

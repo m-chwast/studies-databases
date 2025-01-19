@@ -39,6 +39,13 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
         set => this.RaiseAndSetIfChanged(ref _databaseQueriesSuccessful, value, nameof(DatabaseQueriesSuccessful));
     }
 
+    private string _exceptionMessage = "";
+    public string ExceptionMessage
+    {
+        get => _exceptionMessage;
+        set => this.RaiseAndSetIfChanged(ref _exceptionMessage, value, nameof(ExceptionMessage));
+    }
+
     private System.Threading.Mutex _queryCountMutex = new();
 
     private string _ConnectionString =>
@@ -74,8 +81,9 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
             IncrementSuccessfulQueryCount();
             return true;
         }
-        catch
+        catch (Exception e)
         {
+            SetExceptionMessage(e.Message);
             return false;
         }
     }
@@ -112,8 +120,10 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
                 data.AddRow(row);
             }
         }
-        catch
+        catch (Exception e)
         {
+            SetExceptionMessage(e.Message);
+
             querySuccess = false;
             Console.WriteLine("Exception while reading data!");
             if(_refreshTimer.Enabled == false)
@@ -146,6 +156,13 @@ public class ConnectionModel : ModelBase, IDatabase, IDisposable
     {
         _queryCountMutex.WaitOne();
         DatabaseQueriesSuccessful++;
+        _queryCountMutex.ReleaseMutex();
+    }
+
+    private void SetExceptionMessage(string msg)
+    {
+        _queryCountMutex.WaitOne();
+        ExceptionMessage = msg;
         _queryCountMutex.ReleaseMutex();
     }
 
