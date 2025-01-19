@@ -21,7 +21,7 @@ public class ConnectionViewModel : ViewModelBase
     {
         _connectionStatus = this
             .WhenAnyValue(x => x._connectionModel.DatabaseFault)
-            .Select(x => x ? "Fault detected - refreshing..." : "OK")
+            .Select(x => x ? "Wykryto błąd - odświeżanie..." : "OK")
             .ToProperty(this, x => x.ConnectionStatus);
 
         _databaseStats = this
@@ -32,15 +32,15 @@ public class ConnectionViewModel : ViewModelBase
 
         _exceptionMessage = this
             .WhenAnyValue(x => x._connectionModel.ExceptionMessage)
-            .Select(x => "Last database exception message: " + x)
+            .Select(x => "Ostatni wyjątek bazy danych: " + x)
             .ToProperty(this, x => x.ExceptionMessage);
     }
 
     private string GetDatabaseStatsString(int total, int success)
     {
-        string stats = "Database Queries: ";
-        stats += total.ToString() + " total, ";
-        stats += success.ToString() + " successful";
+        string stats = "Zapytania do bazy danych: ";
+        stats += total.ToString() + " Wszystkie, ";
+        stats += success.ToString() + " Poprawne";
         return stats;
     }
 
