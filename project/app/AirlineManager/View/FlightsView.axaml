@@ -71,6 +71,18 @@
                 <TextBlock Text="{Binding SelectedFlight.AircraftDetails}"/>
             </StackPanel>
 
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Person ID"/>
+                    <TextBox Text="{Binding NewPersonId}" Width="75"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock/>
+                    <Button Content="Add Person To Crew" Command="{Binding AddPersonToCrewCommand}"/>
+                </StackPanel>
+
+            </StackPanel>
+
             <DataGrid ItemsSource="{Binding SelectedFlight.Crew}"
                 Margin="0,10"
                 BorderThickness="1"

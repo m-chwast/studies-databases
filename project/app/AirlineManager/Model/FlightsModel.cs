@@ -42,4 +42,10 @@ public class FlightModel : ModelBase
         string query = $@"CALL airline.insert_flight({route}, '{date}', {aircraft});";
         await _database.ExecuteQuery(query);
     }
+
+    public async Task AddPersonToCrew(int flightId, int personId)
+    {
+        string query = $@"CALL airline.add_person_to_flight({flightId}, {personId});";
+        await _database.ExecuteQuery(query);
+    }
 }

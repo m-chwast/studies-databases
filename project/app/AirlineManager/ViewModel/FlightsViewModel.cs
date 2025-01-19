@@ -38,6 +38,15 @@ public class FlightsViewModel : ViewModelBase
     private ObservableAsPropertyHelper<bool> _flightDetailsVisible;
     public bool FlightDetailsVisible => _flightDetailsVisible.Value;
 
+    private string _newPersonId = string.Empty;
+    public string NewPersonId
+    {
+        get => _newPersonId;
+        set => this.RaiseAndSetIfChanged(ref _newPersonId, value, nameof(NewPersonId));
+    }
+
+    public ReactiveCommand<Unit, Unit> AddPersonToCrewCommand { get; }
+
     public FlightsViewModel(IDatabase database)
     {
         database.Refresh += (o,e) => Refresh();
@@ -51,6 +60,9 @@ public class FlightsViewModel : ViewModelBase
             && !string.IsNullOrWhiteSpace(date)
             && !string.IsNullOrWhiteSpace(aircraft.ToString())));
 
+        AddPersonToCrewCommand = ReactiveCommand.CreateFromTask(AddPersonToCrew,
+            this.WhenAnyValue(x => x.NewPersonId, (person) => !string.IsNullOrEmpty(person)));
+
         _flightDetailsVisible = this.WhenAnyValue(x => x.SelectedFlight)
             .Select(x => x is not null)
             .ToProperty(this, x => x.FlightDetailsVisible);
@@ -60,6 +72,19 @@ public class FlightsViewModel : ViewModelBase
 
         TriggerRefreshFlights();
     }
+
+    private async Task AddPersonToCrew()
+    {
+        if (SelectedFlight is null)
+            return;
+        if (SelectedFlight.Id == 0)
+            return;
+        if (!int.TryParse(NewPersonId, out int personId))
+            return;
+
+        await _model.AddPersonToCrew(SelectedFlight.Id, personId);
+        await RefreshFlightDetails();
+    } 
 
     private async Task AddFlight()
     {
