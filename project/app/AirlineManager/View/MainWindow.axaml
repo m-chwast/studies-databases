@@ -11,6 +11,11 @@
 
 	<DockPanel LastChildFill="False">
 
+		<v:ConnectionView 
+			x:Name="connectionView"
+			DataContext="{Binding ConnectionVM, Mode=OneWay}"
+			DockPanel.Dock="Bottom"/>
+
 		<TabControl
 			DockPanel.Dock="Top"
 			Margin="10">
@@ -40,11 +45,6 @@
 			</TabItem>
 
 		</TabControl>
-
-		<v:ConnectionView 
-			x:Name="connectionView"
-			DataContext="{Binding ConnectionVM, Mode=OneWay}"
-			DockPanel.Dock="Bottom"/>
 
 	</DockPanel>
 
