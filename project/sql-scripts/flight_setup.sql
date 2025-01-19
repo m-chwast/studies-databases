@@ -88,6 +88,8 @@ AS
 $$  
 DECLARE
   tmp_id integer;
+  person_role integer;
+  tmp_data RECORD;
   
 BEGIN
   SELECT FROM airline.flight f WHERE f.flight_id = flight INTO tmp_id;
@@ -99,7 +101,38 @@ BEGIN
   IF NOT FOUND THEN
     RAISE EXCEPTION 'Person % not in database', person;
   END IF;
+
+  SELECT r.role_id
+  FROM airline.role r
+  JOIN airline.person p ON p.person_role_id = r.role_id
+  WHERE p.person_id = person
+  INTO person_role;
+
+  IF person_role = 2 OR person_role = 3 THEN
+        SELECT r.role_id
+        FROM airline.flight f
+        JOIN airline.flight_crew fc ON f.flight_id = fc.flight_id
+        JOIN airline.person p ON p.person_id = fc.person_id
+        JOIN airline.role r ON r.role_id = p.person_role_id
+        WHERE f.flight_id = flight AND p.person_role_id = person_role 
+        INTO tmp_data;
+        IF FOUND THEN
+          RAISE EXCEPTION 'Double role forbidden (%)', person_role;
+        END IF;
+  END IF;
+
+  SELECT p.person_id
+  FROM airline.flight f
+  JOIN airline.flight_crew fc ON f.flight_id = fc.flight_id
+  JOIN airline.person p ON p.person_id = fc.person_id
+  JOIN airline.role r ON r.role_id = p.person_role_id
+  WHERE f.flight_id = flight AND p.person_id = person 
+  INTO tmp_data;
+  IF FOUND THEN
+    RAISE EXCEPTION 'Same person forbidden (%)', person;
+  END IF;
    
+  
   INSERT INTO airline.flight_crew (flight_id, person_id) 
   VALUES (flight, person);
  END;
