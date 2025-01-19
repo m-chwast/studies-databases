@@ -16,6 +16,9 @@ public class MainWindowViewModel : ViewModelBase
     private readonly RoutesViewModel _routesViewModel;
     public RoutesViewModel RoutesVM { get => _routesViewModel; }
 
+    private readonly FlightsViewModel _flightsViewModel;
+    public FlightsViewModel FlightsVM { get => _flightsViewModel; }
+
     public MainWindowViewModel()
     {
         _connectionViewModel = new ConnectionViewModel();
@@ -24,5 +27,6 @@ public class MainWindowViewModel : ViewModelBase
         _aircraftViewModel = new AircraftViewModel(database);
         _personnelViewModel = new PersonnelViewModel(database);
         _routesViewModel = new RoutesViewModel(database);
+        _flightsViewModel = new FlightsViewModel(database);
     }
 }
