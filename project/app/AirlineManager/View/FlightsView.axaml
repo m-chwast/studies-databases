@@ -17,7 +17,6 @@
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Route" Binding="{Binding Route}" />
                 <DataGridTextColumn Header="Date" Binding="{Binding Date}"/>
-                <DataGridTextColumn Header="Time" Binding="{Binding Time}"/>
             </DataGrid.Columns>
         </DataGrid>
 

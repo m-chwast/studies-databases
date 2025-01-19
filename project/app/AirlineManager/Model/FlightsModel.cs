@@ -19,7 +19,7 @@ public class FlightModel : ModelBase
         List<FlightData> flights = new();
         foreach (var row in data.Data)
         {
-            FlightData flight = new(row[0], row[1], row[2], "");
+            FlightData flight = new(row[0], row[1], row[2]);
             flights.Add(flight);
         }
         return flights;
