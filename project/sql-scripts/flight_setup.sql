@@ -105,3 +105,21 @@ BEGIN
  END;
  $$;
  
+ 
+
+DROP PROCEDURE airline.remove_person_from_flight;
+CREATE OR REPLACE PROCEDURE airline.remove_person_from_flight(
+  flight_id_to_remove int, 
+  person_id_to_remove int
+)
+LANGUAGE plpgsql
+AS
+$$ 
+BEGIN
+DELETE FROM airline.flight_crew fc WHERE fc.flight_id =  flight_id_to_remove AND fc.person_id = person_id_to_remove;
+END;
+$$;
+
+GRANT EXECUTE ON PROCEDURE airline.remove_person_from_flight TO db_user_1;
+GRANT DELETE ON airline.flight_crew TO db_user_1;
+
