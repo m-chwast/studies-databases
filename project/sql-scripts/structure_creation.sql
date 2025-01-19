@@ -25,9 +25,8 @@ CREATE TABLE route(route_id int GENERATED ALWAYS AS IDENTITY, flight_time float,
                    FOREIGN KEY (departure_airport_id) REFERENCES airport(airport_id),
                    FOREIGN KEY (arrival_airport_id) REFERENCES airport(airport_id));
 
-CREATE TABLE flight(flight_id int GENERATED ALWAYS AS IDENTITY, flight_date date, flight_start_time time,
-                    route_id int, aircraft_id int, captain_id int,
-                    first_officer_id int, cabin_crew_id int[6],
+CREATE TABLE flight(flight_id int GENERATED ALWAYS AS IDENTITY, flight_date date,
+                    route_id int, aircraft_id int,
                     PRIMARY KEY (flight_id),
                     FOREIGN KEY (route_id) REFERENCES route(route_id),
                     FOREIGN KEY (aircraft_id) REFERENCES aircraft(aircraft_id),
