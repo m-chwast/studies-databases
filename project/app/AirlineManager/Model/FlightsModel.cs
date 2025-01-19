@@ -36,4 +36,10 @@ public class FlightModel : ModelBase
         flight.AircraftDetails = row[1];
         flight.RouteDetails = row[2];
     }
+
+    public async Task AddFlight(string route, string date)
+    {
+        string query = $@"CALL airline.add_flight('{route}', '{date}')";
+        await _database.ExecuteQuery(query);
+    }
 }

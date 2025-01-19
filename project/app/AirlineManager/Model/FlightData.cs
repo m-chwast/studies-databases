@@ -6,8 +6,20 @@ namespace AirlineManager.Model;
 public class FlightData : ModelBase
 {
     public int Id { get; }
-    public string Route { get; }
-    public string Date { get; }
+
+    private string _route = string.Empty;
+    public string Route
+    {
+        get => _route;
+        set => this.RaiseAndSetIfChanged(ref _route, value, nameof(Route));
+    }
+
+    private string _date = string.Empty;
+    public string Date
+    {
+        get => _date;
+        set => this.RaiseAndSetIfChanged(ref _date, value, nameof(Date));
+    }
 
     private int _aircraft = 0;
     public int Aircraft 

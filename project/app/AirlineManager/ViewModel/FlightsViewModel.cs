@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Reactive;
 using System.Threading.Tasks;
 using AirlineManager.Model;
 using ReactiveUI;
@@ -17,8 +18,6 @@ public class FlightsViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _flights, value, nameof(Flights));
     }
 
-
-
     private FlightData? _selectedFlight;
     public FlightData? SelectedFlight
     {
@@ -26,15 +25,36 @@ public class FlightsViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _selectedFlight, value, nameof(SelectedFlight));
     }
 
+    private FlightData _newFlight = new("0", "", "");
+    public FlightData NewFlight
+    {
+        get => _newFlight;
+        set => this.RaiseAndSetIfChanged(ref _newFlight, value, nameof(NewFlight));
+    }
+
+    public ReactiveCommand<Unit, Unit> AddFlightCommand { get; }
+
     public FlightsViewModel(IDatabase database)
     {
         database.Refresh += (o,e) => Refresh();
 
         _model = new FlightModel(database);
     
+        AddFlightCommand = ReactiveCommand.CreateFromTask(AddFlight, 
+            this.WhenAnyValue(x => x.NewFlight.Route, x => x.NewFlight.Date, 
+            (route, date) => 
+            !string.IsNullOrWhiteSpace(route) 
+            && !string.IsNullOrWhiteSpace(date)));
+
         this.WhenAnyValue(x => x.SelectedFlight)
             .Subscribe(async _ => await RefreshFlightDetails());
 
+        TriggerRefreshFlights();
+    }
+
+    private async Task AddFlight()
+    {
+        await _model.AddFlight(NewFlight.Route, NewFlight.Date);
         TriggerRefreshFlights();
     }
 
