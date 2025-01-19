@@ -1,23 +1,23 @@
-DROP VIEW airline.flights_view;
+DROP VIEW linia.loty_widok;
 
-CREATE OR REPLACE VIEW airline.flights_view AS
-SELECT f.flight_id, f.route_id, f.flight_date
-FROM airline.flight f; 
+CREATE OR REPLACE VIEW linia.loty_widok AS
+SELECT lot.lot_id, lot.trasa_id, lot.lot_data
+FROM linia.lot lot; 
 
-GRANT SELECT ON airline.flights_view TO db_user_1;
+GRANT SELECT ON linia.loty_widok TO db_user_1;
 
-INSERT INTO airline.flight (route_id, aircraft_id, flight_date) VALUES
+INSERT INTO linia.lot (trasa_id, samolot_id, lot_data) VALUES
 (6, 1, '2025-1-20 11:00');
 
 
 
 
-DROP FUNCTION airline.get_flight_details;
+DROP FUNCTION linia.czytaj_detale_lotu;
 
-CREATE OR REPLACE FUNCTION airline.get_flight_details(selected_flight_id int)
+CREATE OR REPLACE FUNCTION linia.czytaj_detale_lotu(wybrany_lot_id int)
   RETURNS TABLE (
-  aircraft_id int,
-  aircraft_type airline.aircraft_type.aircraft_type_name%TYPE,
+  samolot_id int,
+  samolot_typ linia.typ_samolotu.typ_samolotu_nazwa%TYPE,
   route text
   )
 LANGUAGE plpgsql
@@ -25,29 +25,29 @@ AS
 $$
 BEGIN
   RETURN QUERY 
-  SELECT f.aircraft_id, at.aircraft_type_name, dep_a.airport_designator || '-' || dest_a.airport_designator
-  FROM airline.flight f
+  SELECT lot.samolot_id, ts.typ_samolotu_nazwa, odlot_l.lotnisko_kod || '-' || przylot_l.lotnisko_kod
+  FROM linia.lot lot
   
-  JOIN airline.aircraft ac ON f.aircraft_id = ac.aircraft_id
-  JOIN airline.aircraft_type at ON ac.aircraft_type_id = at.aircraft_type_id
+  JOIN linia.samolot s ON lot.samolot_id = s.samolot_id
+  JOIN linia.typ_samolotu ts ON s.typ_samolotu_id = ts.typ_samolotu_id
   
-  JOIN airline.route r ON f.route_id = r.route_id
-  JOIN airline.airport dep_a ON r.departure_airport_id = dep_a.airport_id
-  JOIN airline.airport dest_a ON r.arrival_airport_id = dest_a.airport_id
+  JOIN linia.trasa t ON lot.trasa_id = t.trasa_id
+  JOIN linia.lotnisko odlot_l ON t.odlot_id = odlot_l.lotnisko_id
+  JOIN linia.lotnisko przylot_l ON t.przylot_id = przylot_l.lotnisko_id
   
-  WHERE f.flight_id = selected_flight_id;
+  WHERE lot.lot_id = wybrany_lot_id;
   
   RETURN;
   END;
 $$;
 
-GRANT EXECUTE ON FUNCTION airline.get_flight_details TO db_user_1;
+GRANT EXECUTE ON FUNCTION linia.czytaj_detale_lotu TO db_user_1;
 
 
-CREATE OR REPLACE PROCEDURE airline.insert_flight(
-  route int, 
-  flight_date timestamp,
-  aircraft int
+CREATE OR REPLACE PROCEDURE linia.dodaj_lot(
+  trasa int, 
+  lot_data timestamp,
+  samolot int
 )
 LANGUAGE plpgsql
 AS
@@ -56,107 +56,107 @@ DECLARE
   tmp_id integer;
   
 BEGIN
-  SELECT FROM airline.route r WHERE r.route_id = route INTO tmp_id;
+  SELECT FROM linia.trasa t WHERE t.trasa_id = trasa INTO tmp_id;
   IF NOT FOUND THEN
-    RAISE EXCEPTION 'Route % not in database', route;
+    RAISE EXCEPTION 'Trasa % nie jest w bazie danych', trasa;
   END IF;
 
-  SELECT FROM airline.aircraft a WHERE a.aircraft_id = aircraft INTO tmp_id;
+  SELECT FROM linia.samolot s WHERE s.samolot_id = samolot INTO tmp_id;
   IF NOT FOUND THEN
-    RAISE EXCEPTION 'Aircraft % not in database', aircraft;
+    RAISE EXCEPTION 'Samolot % nie jest w bazie danych', samolot;
   END IF;
    
-  INSERT INTO airline.flight (route_id, flight_date, aircraft_id) 
-  VALUES (route, flight_date, aircraft);
+  INSERT INTO linia.lot (trasa_id, lot_data, samolot_id) 
+  VALUES (trasa, lot_data, samolot);
  END;
  $$;
  
- GRANT EXECUTE ON PROCEDURE airline.insert_flight TO db_user_1;
- GRANT INSERT ON airline.flight TO db_user_1;
+ GRANT EXECUTE ON PROCEDURE linia.dodaj_lot TO db_user_1;
+ GRANT INSERT ON linia.lot TO db_user_1;
  
  
  
- GRANT EXECUTE ON PROCEDURE airline.add_person_to_flight TO db_user_1;
- GRANT INSERT ON airline.flight_crew TO db_user_1;
+ GRANT EXECUTE ON PROCEDURE linia.dodaj_osobe_do_lotu TO db_user_1;
+ GRANT INSERT ON linia.lot_zaloga TO db_user_1;
 
-CREATE OR REPLACE PROCEDURE airline.add_person_to_flight(
-  flight int, 
-  person int
+CREATE OR REPLACE PROCEDURE linia.dodaj_osobe_do_lotu(
+  lot int, 
+  osoba int
 )
 LANGUAGE plpgsql
 AS
 $$  
 DECLARE
   tmp_id integer;
-  person_role integer;
+  osoba_rola integer;
   tmp_data RECORD;
   
 BEGIN
-  SELECT FROM airline.flight f WHERE f.flight_id = flight INTO tmp_id;
+  SELECT FROM linia.lot l WHERE l.lot_id = lot INTO tmp_id;
   IF NOT FOUND THEN
-    RAISE EXCEPTION 'Flight % not in database', flight;
+    RAISE EXCEPTION 'Lot % nie jest w bazie danych', lot;
   END IF;
 
-  SELECT FROM airline.person p WHERE p.person_id = person INTO tmp_id;
+  SELECT FROM linia.osoba o WHERE o.osoba_id = osoba INTO tmp_id;
   IF NOT FOUND THEN
-    RAISE EXCEPTION 'Person % not in database', person;
+    RAISE EXCEPTION 'Osoba % nie jest w bazie danych', osoba;
   END IF;
 
-  SELECT r.role_id
-  FROM airline.role r
-  JOIN airline.person p ON p.person_role_id = r.role_id
-  WHERE p.person_id = person
-  INTO person_role;
+  SELECT r.rola_id
+  FROM linia.rola r
+  JOIN linia.osoba o ON o.oosba_rola_id = r.rola_id
+  WHERE o.osoba_id = osoba
+  INTO osoba_rola;
 
-  IF person_role = 2 OR person_role = 3 THEN
-        SELECT r.role_id
-        FROM airline.flight f
-        JOIN airline.flight_crew fc ON f.flight_id = fc.flight_id
-        JOIN airline.person p ON p.person_id = fc.person_id
-        JOIN airline.role r ON r.role_id = p.person_role_id
-        WHERE f.flight_id = flight AND p.person_role_id = person_role 
+  IF osoba_rola = 2 OR osoba_rola = 3 THEN
+        SELECT r.rola_id
+        FROM linia.lot l
+        JOIN linia.lot_zaloga lz ON l.lot_id = lz.lot_id
+        JOIN linia.osoba o ON o.osoba_id = lz.osoba_id
+        JOIN linia.rola r ON r.rola_id = o.osoba_rola_id
+        WHERE l.lot_id = lot AND o.osoba_rola_id = osoba_rola 
         INTO tmp_data;
         IF FOUND THEN
-          RAISE EXCEPTION 'Double role forbidden (%)', person_role;
+          RAISE EXCEPTION 'Podwójna rola zabroniona (%)', osoba_rola;
         END IF;
   END IF;
 
-  SELECT p.person_id
-  FROM airline.flight f
-  JOIN airline.flight_crew fc ON f.flight_id = fc.flight_id
-  JOIN airline.person p ON p.person_id = fc.person_id
-  JOIN airline.role r ON r.role_id = p.person_role_id
-  WHERE f.flight_id = flight AND p.person_id = person 
+  SELECT o.osoba_id
+  FROM linia.lot l
+  JOIN linia.lot_zaloga lz ON l.lot_id = lz.lot_id
+  JOIN linia.osoba o ON o.osoba_id = lz.osoba_id
+  JOIN linia.rola r ON r.rola_id = o.osoba_rola_id
+  WHERE l.lot_id = lot AND o.osoba_id = osoba 
   INTO tmp_data;
   IF FOUND THEN
-    RAISE EXCEPTION 'Same person forbidden (%)', person;
+    RAISE EXCEPTION 'Ta sama osoba zabroniona (%)', osoba;
   END IF;
    
   
-  INSERT INTO airline.flight_crew (flight_id, person_id) 
-  VALUES (flight, person);
+  INSERT INTO linia.lot_zaloga (lot_id, osoba_id) 
+  VALUES (lot, osoba);
  END;
  $$;
  
  
 
-DROP PROCEDURE airline.remove_person_from_flight;
-CREATE OR REPLACE PROCEDURE airline.remove_person_from_flight(
-  flight_id_to_remove int, 
-  person_id_to_remove int
+DROP PROCEDURE linia.usun_osobe_z_lotu;
+CREATE OR REPLACE PROCEDURE linia.usun_osobe_z_lotu(
+  lot_id_do_usuniecia int, 
+  osoba_id_do_usuniecia int
 )
 LANGUAGE plpgsql
 AS
 $$ 
 BEGIN
-DELETE FROM airline.flight_crew fc WHERE fc.flight_id =  flight_id_to_remove AND fc.person_id = person_id_to_remove;
+DELETE FROM linia.lot_zaloga lz WHERE lz.lot_id =  lot_id_do_usuniecia AND lz.osoba_id = osoba_id_do_usuniecia;
 END;
 $$;
 
-GRANT EXECUTE ON PROCEDURE airline.remove_person_from_flight TO db_user_1;
-GRANT DELETE ON airline.flight_crew TO db_user_1;
+GRANT EXECUTE ON PROCEDURE linia.usun_osobe_z_lotu TO db_user_1;
+GRANT DELETE ON linia.lot_zaloga TO db_user_1;
 
 
 
-GRANT DELETE ON airline.flight TO db_user_1;
+GRANT DELETE ON linia.lot TO db_user_1;
 

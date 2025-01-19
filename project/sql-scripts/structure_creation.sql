@@ -1,39 +1,37 @@
 -- use this to completely delete the schema
--- DROP SCHEMA airline CASCADE;
+-- DROP SCHEMA linia CASCADE;
 
-CREATE SCHEMA airline;
-SET SEARCH_PATH to airline;
+CREATE SCHEMA linia;
+SET SEARCH_PATH to linia;
 
-CREATE TABLE aircraft_type(aircraft_type_id int, aircraft_type_name char(20),
-                           PRIMARY KEY (aircraft_type_id));
-CREATE TABLE aircraft(aircraft_id int, aircraft_type_id int,
-                      PRIMARY KEY (aircraft_id),
-                      FOREIGN KEY (aircraft_type_id) REFERENCES aircraft_type(aircraft_type_id));
+CREATE TABLE typ_samolotu(typ_samolotu_id int, typ_samolotu_nazwa char(20),
+                           PRIMARY KEY (typ_samolotu_id));
+CREATE TABLE samolot(samolot_id int, typ_samolotu_id int,
+                      PRIMARY KEY (samolot_id),
+                      FOREIGN KEY (typ_samolotu_id) REFERENCES typ_samolotu(typ_samolotu_id));
 
-CREATE TABLE role(role_id int, role_name char(30),
-                  PRIMARY KEY (role_id));
-CREATE TABLE person(person_id int GENERATED ALWAYS AS IDENTITY, person_name varchar(30), person_surname varchar(30),
-                    person_role_id int,
-                    PRIMARY KEY (person_id),
-                    FOREIGN KEY (person_role_id) REFERENCES role(role_id));
+CREATE TABLE rola(rola_id int, rola_nazwa char(30),
+                  PRIMARY KEY (rola_id));
+CREATE TABLE osoba(osoba_id int GENERATED ALWAYS AS IDENTITY, osoba_imie varchar(30), osoba_nazwisko varchar(30),
+                    osoba_rola_id int,
+                    PRIMARY KEY (osoba_id),
+                    FOREIGN KEY (osoba_rola_id) REFERENCES rola(rola_id));
 
-CREATE TABLE airport (airport_id int GENERATED ALWAYS AS IDENTITY, airport_designator char(4), airport_name varchar(100),
-                      PRIMARY KEY (airport_id));
+CREATE TABLE lotnisko(lotnisko_id int GENERATED ALWAYS AS IDENTITY, lotnisko_kod char(4), lotnisko_nazwa varchar(100),
+                      PRIMARY KEY (lotnisko_id));
 
-CREATE TABLE route(route_id int GENERATED ALWAYS AS IDENTITY, flight_time float, departure_airport_id int, arrival_airport_id int,
-                   PRIMARY KEY (route_id),
-                   FOREIGN KEY (departure_airport_id) REFERENCES airport(airport_id),
-                   FOREIGN KEY (arrival_airport_id) REFERENCES airport(airport_id));
+CREATE TABLE trasa(trasa_id int GENERATED ALWAYS AS IDENTITY, czas_lotu float, odlot_id int, przylot_id int,
+                   PRIMARY KEY (trasa_id),
+                   FOREIGN KEY (odlot_id) REFERENCES lotnisko(lotnisko_id),
+                   FOREIGN KEY (przylot_id) REFERENCES lotnisko(lotnisko_id));
 
-CREATE TABLE flight(flight_id int GENERATED ALWAYS AS IDENTITY, flight_date date,
-                    route_id int, aircraft_id int,
-                    PRIMARY KEY (flight_id),
-                    FOREIGN KEY (route_id) REFERENCES route(route_id),
-                    FOREIGN KEY (aircraft_id) REFERENCES aircraft(aircraft_id),
-                    FOREIGN KEY (captain_id) REFERENCES person(person_id),
-                    FOREIGN KEY (first_officer_id) REFERENCES person(person_id));
+CREATE TABLE lot(lot_id int GENERATED ALWAYS AS IDENTITY, lot_data date,
+                    trasa_id int, samolot_id int,
+                    PRIMARY KEY (lot_id),
+                    FOREIGN KEY (trasa_id) REFERENCES trasa(trasa_id),
+                    FOREIGN KEY (samolot_id) REFERENCES samolot(samolot_id));
 
-CREATE TABLE flight_crew(flight_crew_id int GENERATED ALWAYS AS IDENTITY, flight_id int, person_id int,
-                         PRIMARY KEY (flight_crew_id),
-                         FOREIGN KEY (flight_id) REFERENCES flight(flight_id),
-                         FOREIGN KEY (person_id) REFERENCES person(person_id));
+CREATE TABLE lot_zaloga(lot_zaloga_id int GENERATED ALWAYS AS IDENTITY, lot_id int, osoba_id int,
+                         PRIMARY KEY (lot_zaloga_id),
+                         FOREIGN KEY (lot_id) REFERENCES lot(lot_id),
+                         FOREIGN KEY (osoba_id) REFERENCES osoba(osoba_id));

@@ -1,5 +1,5 @@
 -- Insert 30 persons with person_role_id 1
-INSERT INTO person (person_name, person_surname, person_role_id) VALUES
+INSERT INTO osoba (osoba_imie, osoba_nazwisko, osoba_rola_id) VALUES
 ('Kamil', 'Nowak', 1),
 ('Marek', 'Kowalski', 1),
 ('Piotr', 'Wiśniewski', 1),
@@ -32,7 +32,7 @@ INSERT INTO person (person_name, person_surname, person_role_id) VALUES
 ('Dawid', 'Wielki', 1);
 
 -- Insert 8 persons with person_role_id 2
-INSERT INTO person (person_name, person_surname, person_role_id) VALUES
+INSERT INTO osoba (osoba_imie, osoba_nazwisko, osoba_rola_id) VALUES
 ('Zofia', 'Nowakowska', 2),
 ('Michał', 'Borkowski', 2),
 ('Wiktoria', 'Lis', 2),
@@ -43,7 +43,7 @@ INSERT INTO person (person_name, person_surname, person_role_id) VALUES
 ('Olga', 'Górska', 2);
 
 -- Insert 12 persons with person_role_id 3
-INSERT INTO person (person_name, person_surname, person_role_id) VALUES
+INSERT INTO osoba (osoba_imie, osoba_nazwisko, osoba_rola_id) VALUES
 ('Julia', 'Zawisza', 3),
 ('Krzysztof', 'Michałowski', 3),
 ('Karolina', 'Turska', 3),

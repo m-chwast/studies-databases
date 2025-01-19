@@ -1,4 +1,4 @@
-INSERT INTO airline.airport (airport_designator, airport_name) VALUES
+INSERT INTO linia.lotnisko (lotnisko_kod, lotnisko_nazwa) VALUES
 ('EGLL', 'London Heathrow Airport'),
 ('LFPG', 'Charles de Gaulle Airport'),
 ('EDDF', 'Frankfurt Airport'),

@@ -1,7 +1,7 @@
-CREATE OR REPLACE PROCEDURE airline.insert_route(
-  departure airline.airport.airport_designator%TYPE, 
-  destination airline.airport.airport_designator%TYPE,
-  flight_time airline.route.flight_time%TYPE
+CREATE OR REPLACE PROCEDURE linia.dodaj_trase(
+  odlot linia.lotnisko.lotnisko_kod%TYPE, 
+  przylot linia.lotnisko.lotnisko_kod%TYPE,
+  czas_lotu linia.trasa.czas_lotu%TYPE
 )
 LANGUAGE plpgsql
 AS
@@ -11,50 +11,50 @@ DECLARE
   destination_id integer;
   
 BEGIN
-  SELECT INTO departure_id a.airport_id FROM airline.airport a WHERE a.airport_designator = departure;
+  SELECT INTO departure_id l.lotnisko_id FROM linia.lotnisko l WHERE l.lotnisko_kod = odlot;
   IF NOT FOUND THEN
-    RAISE EXCEPTION 'Airport % not in database', departure;
+    RAISE EXCEPTION 'Lotnisko % nie jest w bazie danych', odlot;
   END IF;
    
-  SELECT INTO destination_id a.airport_id FROM airline.airport a WHERE a.airport_designator = destination;
+  SELECT INTO destination_id l.lotnisko_id FROM linia.lotnisko l WHERE l.lotnisko_kod = przylot;
   IF NOT FOUND THEN
-    RAISE EXCEPTION 'Airport % not in database', destination;
+    RAISE EXCEPTION 'Lotnisko % nie jest w bazie danych', przylot;
   END IF;
   
-  INSERT INTO airline.route (flight_time, departure_airport_id, arrival_airport_id) 
-  VALUES (flight_time, departure_id, destination_id);
+  INSERT INTO linia.trasa (czas_lotu, odlot_id, przylot_id) 
+  VALUES (czas_lotu, departure_id, destination_id);
  END;
  $$;
 
 
 
-CREATE OR REPLACE FUNCTION airline.get_routes()
+CREATE OR REPLACE FUNCTION linia.czytaj_trasy()
   RETURNS TABLE (
-  route_id int,
-  departure char(4),
-  destination char(4),
-  flight_time float
+  trasa_id int,
+  odlot char(4),
+  przylot char(4),
+  czas_lotu float
   )
 LANGUAGE plpgsql
 AS
 $$
 BEGIN
-  RETURN QUERY SELECT r.route_id, dep_a.airport_designator departure, dest_a.airport_designator destination, r.flight_time
-  FROM airline.route r
-  JOIN airline.airport dest_a ON r.arrival_airport_id = dest_a.airport_id
-  JOIN airline.airport dep_a ON r.departure_airport_id = dep_a.airport_id;
+  RETURN QUERY SELECT t.trasa_id, odlot_l.lotnisko_kod odlot, przylot_l.lotnisko_kod przylot, t.czas_lotu
+  FROM linia.trasa t
+  JOIN linia.lotnisko przylot_l ON t.przylot_id = przylot_l.lotnisko_id
+  JOIN linia.lotnisko odlot_l ON t.odlot_id = odlot_l.lotnisko_id;
   RETURN;
   END;
 $$;
 
 
-CREATE OR REPLACE PROCEDURE airline.delete_route(
-  route_to_delete_id int)
+CREATE OR REPLACE PROCEDURE linia.usun_trase(
+  trasa_do_usuniecia_id int)
 LANGUAGE plpgsql
 AS
 $$  
 BEGIN
-  DELETE FROM airline.route r WHERE r.route_id = route_to_delete_id;
+  DELETE FROM linia.trasa t WHERE t.trasa_id = trasa_do_usuniecia_id;
 END;
 $$;
 
