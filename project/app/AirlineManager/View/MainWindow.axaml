@@ -7,7 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AirlineManager.View.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="Airline Manager">
+        Title="Airline Manager PL">
 
 	<DockPanel LastChildFill="False">
 
@@ -20,25 +20,25 @@
 			DockPanel.Dock="Top"
 			Margin="10">
 
-			<TabItem Header="Fleet">
+			<TabItem Header="Flota">
 				<v:AircraftView 
 					x:Name="AircraftView"
 					DataContext="{Binding AircraftVM, Mode=OneWay}"/>
 			</TabItem>	
 
-			<TabItem Header="Personnel">
+			<TabItem Header="Personel">
 				<v:PersonnelView 
 					x:Name="PersonnelView"
 					DataContext="{Binding PersonnelVM, Mode=OneWay}"/>
 			</TabItem>	
 
-			<TabItem Header="Routes">
+			<TabItem Header="Linie">
 				<v:RoutesView 
 					x:Name="RoutesView"
 					DataContext="{Binding RoutesVM, Mode=OneWay}"/>
 			</TabItem>
 
-			<TabItem Header="Flights">
+			<TabItem Header="Loty">
 				<v:FlightsView 
 					x:Name="FlightsView"
 					DataContext="{Binding FlightsVM, Mode=OneWay}"/>

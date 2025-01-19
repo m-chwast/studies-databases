@@ -11,7 +11,7 @@
 
         <StackPanel Orientation="Horizontal">
         
-            <TextBlock Text="Connection: " />
+            <TextBlock Text="Połączenie: " />
 
             <TextBlock Text="{Binding ConnectionStatus}"/>
 

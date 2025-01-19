@@ -14,18 +14,18 @@
 	     
         <StackPanel DockPanel.Dock="Top">
 
-        <TextBlock Text="Show:" Margin="0,5"/>
+        <TextBlock Text="Pokaż:" Margin="0,5"/>
 
         <CheckBox 
-            Content="Flight Attendants" 
+            Content="Stewardów" 
             IsChecked="{Binding ShowFlightAttendants}"/>
 
         <CheckBox 
-            Content="Captains" 
+            Content="Kapitanów" 
             IsChecked="{Binding ShowCaptains}"/>
 
         <CheckBox 
-            Content="First Officers" 
+            Content="Pierwszych Oficerów" 
             IsChecked="{Binding ShowFirstOfficers}"/>
 
         </StackPanel>
@@ -38,9 +38,9 @@
             IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="Name" Binding="{Binding FirstName}"/>
-                <DataGridTextColumn Header="Surname" Binding="{Binding LastName}"/>
-                <DataGridTextColumn Header="Role" Binding="{Binding Role}"/>
+                <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}"/>
+                <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}"/>
+                <DataGridTextColumn Header="Rola" Binding="{Binding Role}"/>
             </DataGrid.Columns>
         </DataGrid>
         
@@ -53,22 +53,22 @@
         <DockPanel LastChildFill="False" Margin="10">
 
             <TextBlock 
-                Text="Add new person"
+                Text="Dodaj nową osobę"
                 Margin="5"
                 DockPanel.Dock="Top"/>
 
             <StackPanel Margin="5">
-                <TextBlock Text="Name"/>
+                <TextBlock Text="Imię"/>
                 <TextBox Text="{Binding NewPersonName}" Width="150"/>
             </StackPanel>
 
             <StackPanel Margin="5">
-                <TextBlock Text="Surname"/>
+                <TextBlock Text="Nazwisko"/>
                 <TextBox Text="{Binding NewPersonSurname}" Width="150"/>
             </StackPanel>
 
             <StackPanel Margin="5">
-                <TextBlock Text="Role"/>
+                <TextBlock Text="Rola"/>
                 <ComboBox ItemsSource="{Binding Roles}" 
                     SelectedItem="{Binding SelectedRole, Mode=OneWayToSource}"
                     Width="150">
@@ -77,7 +77,7 @@
 
             <Button Margin="5"
                 Command="{Binding AddPersonCommand}" 
-                Content="Add"
+                Content="Dodaj"
                 Width="150"/>
                 
         </DockPanel>
@@ -87,19 +87,19 @@
         <DockPanel LastChildFill="False" Margin="10">
 
             <TextBlock 
-                Text="Delete person"
+                Text="Usuń osobę"
                 Margin="5"
                 DockPanel.Dock="Top"/>
 
             <StackPanel DockPanel.Dock="Top" Margin="5" Orientation="Horizontal">
 
                 <StackPanel Margin="5">
-                    <TextBlock Text="ID Filter"/>
+                    <TextBlock Text="Filtr ID"/>
                     <TextBox Text="{Binding DeletePersonId}" Width="150"/>
                 </StackPanel>
 
                 <StackPanel Margin="5">
-                    <TextBlock Text="Surname Filter"/>
+                    <TextBlock Text="Filtr Nazwiska"/>
                     <TextBox Text="{Binding DeletePersonSurname}" Width="150"/>
                 </StackPanel>
 
@@ -112,16 +112,16 @@
                 Margin="5">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
-                    <DataGridTextColumn Header="Name" Binding="{Binding FirstName}"/>
-                    <DataGridTextColumn Header="Surname" Binding="{Binding LastName}"/>
-                    <DataGridTextColumn Header="Role" Binding="{Binding Role}"/>
-                    <DataGridCheckBoxColumn Header="Delete" Binding="{Binding IsSelected}"/>
+                    <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}"/>
+                    <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}"/>
+                    <DataGridTextColumn Header="Rola" Binding="{Binding Role}"/>
+                    <DataGridCheckBoxColumn Header="Usuń" Binding="{Binding IsSelected}"/>
                 </DataGrid.Columns>
             </DataGrid>
             
             <Button Margin="5"
                 Command="{Binding DeletePersonCommand}" 
-                Content="Delete Selected"
+                Content="Usuń zaznaczone"
                 Width="150"/>
 
         </DockPanel>

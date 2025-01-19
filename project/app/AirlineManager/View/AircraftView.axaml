@@ -10,7 +10,7 @@
 	<DockPanel LastChildFill="False" Margin="10">
 	     
         <CheckBox 
-            Content="Display Short List" 
+            Content="Wyświetl Krótką Listę" 
             IsChecked="{Binding IsShortList}"
             DockPanel.Dock="Top"/>
 
@@ -22,8 +22,8 @@
             IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsVisible="{Binding IdVisible}"/>
-                <DataGridTextColumn Header="Type Name" Binding="{Binding Name}" />
-                <DataGridTextColumn Header="Type Count" Binding="{Binding Count}" IsVisible="{Binding CountVisible}"/>
+                <DataGridTextColumn Header="Nazwa Typu" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Ilość" Binding="{Binding Count}" IsVisible="{Binding CountVisible}"/>
             </DataGrid.Columns>
         </DataGrid>
 
