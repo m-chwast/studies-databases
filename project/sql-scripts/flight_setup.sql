@@ -73,3 +73,35 @@ BEGIN
  
  GRANT EXECUTE ON PROCEDURE airline.insert_flight TO db_user_1;
  GRANT INSERT ON airline.flight TO db_user_1;
+ 
+ 
+ 
+ GRANT EXECUTE ON PROCEDURE airline.add_person_to_flight TO db_user_1;
+ GRANT INSERT ON airline.flight_crew TO db_user_1;
+
+CREATE OR REPLACE PROCEDURE airline.add_person_to_flight(
+  flight_id int, 
+  person_id int
+)
+LANGUAGE plpgsql
+AS
+$$  
+DECLARE
+  tmp_id integer;
+  
+BEGIN
+  SELECT FROM airline.flight f WHERE f.flight_id = flight_id INTO tmp_id;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Flight % not in database', flight_id;
+  END IF;
+
+  SELECT FROM airline.person p WHERE p.person_id = person_id INTO tmp_id;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Person % not in database', person_id;
+  END IF;
+   
+  INSERT INTO airline.flight_crew (flight_id, person_id) 
+  VALUES (flight_id, person_id);
+ END;
+ $$;
+ 
