@@ -12,13 +12,41 @@
             Margin="0,10"
             BorderThickness="1"
             BorderBrush="Gray"
-            GridLinesVisibility="All">
+            GridLinesVisibility="All"
+            SelectedItem="{Binding SelectedFlight, Mode=OneWayToSource}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Route" Binding="{Binding Route}" />
                 <DataGridTextColumn Header="Date" Binding="{Binding Date}"/>
             </DataGrid.Columns>
         </DataGrid>
+
+        <Border BorderBrush="Gray" BorderThickness="1" Margin="10">
+        <StackPanel Spacing="10" Margin="10">
+            <TextBlock Text="Flight Details" HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" Spacing="5">
+                <TextBlock Text="ID:"/>
+                <TextBlock Text="{Binding SelectedFlight.Id}"/>
+                <TextBlock Text="Date:"/>
+                <TextBlock Text="{Binding SelectedFlight.Date}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="5">
+                <TextBlock Text="Route:"/>
+                <TextBlock Text="{Binding SelectedFlight.Route}"/>
+                <TextBlock Text="Route Details:"/>
+                <TextBlock Text="{Binding SelectedFlight.RouteDetails}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="5">
+                <TextBlock Text="Aircraft:"/>
+                <TextBlock Text="{Binding SelectedFlight.Aircraft}"/>
+                <TextBlock Text="Aircraft Details:"/>
+                <TextBlock Text="{Binding SelectedFlight.AircraftDetails}"/>
+            </StackPanel>
+
+        </StackPanel>
+        </Border>
 
     </StackPanel>
 

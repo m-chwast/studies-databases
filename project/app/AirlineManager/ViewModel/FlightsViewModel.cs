@@ -16,6 +16,13 @@ public class FlightsViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _flights, value, nameof(Flights));
     }
 
+    private FlightData _selectedFlight = new();
+    public FlightData SelectedFlight
+    {
+        get => _selectedFlight;
+        set => this.RaiseAndSetIfChanged(ref _selectedFlight, value, nameof(SelectedFlight));
+    }
+
     public FlightsViewModel(IDatabase database)
     {
         database.Refresh += (o,e) => Refresh();
