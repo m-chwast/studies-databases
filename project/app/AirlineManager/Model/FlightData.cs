@@ -5,7 +5,12 @@ namespace AirlineManager.Model;
 
 public class FlightData : ModelBase
 {
-    public int Id { get; }
+    private int _id = 0;
+    public int Id
+    {
+        get => _id;
+        set => this.RaiseAndSetIfChanged(ref _id, value, nameof(Id));
+    }
 
     private string _route = string.Empty;
     public string Route
