@@ -61,6 +61,12 @@ public class FlightModel : ModelBase
         await _database.ExecuteQuery(query);
     }
 
+    public async Task DeleteFlight(int flightId)
+    {
+        string query = $@"DELETE FROM airline.flight f WHERE f.flight_id = {flightId};";
+        await _database.ExecuteQuery(query);
+    }
+
     public async Task AddPersonToCrew(int flightId, int personId)
     {
         string query = $@"CALL airline.add_person_to_flight({flightId}, {personId});";
@@ -71,5 +77,5 @@ public class FlightModel : ModelBase
     {
         string query = $@"CALL airline.remove_person_from_flight({flightId}, {personId});";
         await _database.ExecuteQuery(query);
-    } 
+    }
 }

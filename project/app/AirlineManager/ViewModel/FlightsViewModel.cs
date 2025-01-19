@@ -33,7 +33,16 @@ public class FlightsViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _newFlight, value, nameof(NewFlight));
     }
 
+    private string _flightToDelete = string.Empty;
+    public string FlightToDelete
+    {
+        get => _flightToDelete;
+        set => this.RaiseAndSetIfChanged(ref _flightToDelete, value, nameof(FlightToDelete));
+    }
+
     public ReactiveCommand<Unit, Unit> AddFlightCommand { get; }
+
+    public ReactiveCommand<Unit, Unit> DeleteFlightCommand { get; }
 
     private ObservableAsPropertyHelper<bool> _flightDetailsVisible;
     public bool FlightDetailsVisible => _flightDetailsVisible.Value;
@@ -61,6 +70,9 @@ public class FlightsViewModel : ViewModelBase
             !string.IsNullOrWhiteSpace(route) 
             && !string.IsNullOrWhiteSpace(date)
             && !string.IsNullOrWhiteSpace(aircraft.ToString())));
+
+        DeleteFlightCommand = ReactiveCommand.CreateFromTask(DeleteFlight,
+            this.WhenAnyValue(x => x.FlightToDelete, (flight) => !string.IsNullOrEmpty(flight)));
 
         AddPersonToCrewCommand = ReactiveCommand.CreateFromTask(AddPersonToCrew,
             this.WhenAnyValue(x => x.NewPersonId, (person) => !string.IsNullOrEmpty(person)));
@@ -107,6 +119,13 @@ public class FlightsViewModel : ViewModelBase
     private async Task AddFlight()
     {
         await _model.AddFlight(NewFlight.Route, NewFlight.Date, NewFlight.Aircraft);
+        TriggerRefreshFlights();
+    }
+
+    private async Task DeleteFlight()
+    {
+        if(int.TryParse(FlightToDelete, out int flightToDeleteId))
+        await _model.DeleteFlight(flightToDeleteId);
         TriggerRefreshFlights();
     }
 
