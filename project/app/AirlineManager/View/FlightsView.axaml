@@ -21,7 +21,6 @@
             </DataGrid.Columns>
         </DataGrid>
 
-
     </StackPanel>
 
 </UserControl>
