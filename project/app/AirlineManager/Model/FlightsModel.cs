@@ -24,4 +24,16 @@ public class FlightModel : ModelBase
         }
         return flights;
     }
+
+    public async Task GetFlightDetails(FlightData flight)
+    {
+        string query = $@"SELECT * FROM airline.get_flight_details({flight.Id})";
+        var data = await _database.GetData(query);
+        if(data.RowCount == 0)
+            return;
+        var row = data.Data[0];
+        flight.Aircraft = int.Parse(row[0]);   
+        flight.AircraftDetails = row[1];
+        flight.RouteDetails = row[2];
+    }
 }

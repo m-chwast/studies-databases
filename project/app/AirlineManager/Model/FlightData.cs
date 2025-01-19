@@ -1,18 +1,42 @@
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using ReactiveUI;
 
 namespace AirlineManager.Model;
 
-public class FlightData
+public class FlightData : ModelBase
 {
     public int Id { get; }
     public string Route { get; }
     public string Date { get; }
 
-    public List<int> Crew { get; set; } = new();
-    public int Aircraft { get; set; } = 0;
-    public string AircraftDetails { get; set; } = "";
-    public string RouteDetails { get; set; } = "";
-    
+    private int _aircraft = 0;
+    public int Aircraft 
+    { 
+        get => _aircraft; 
+        set => this.RaiseAndSetIfChanged(ref _aircraft, value, nameof(Aircraft)); 
+    }
+
+    private ObservableCollection<int> _crew = new();
+    public ObservableCollection<int> Crew 
+    {
+        get => _crew;
+        set => this.RaiseAndSetIfChanged(ref _crew, value, nameof(Crew));
+    }
+
+    private string _aircraftDetails = string.Empty;
+    public string AircraftDetails
+    {
+        get => _aircraftDetails;
+        set => this.RaiseAndSetIfChanged(ref _aircraftDetails, value, nameof(AircraftDetails));
+    }
+
+    private string _routeDetails = string.Empty;
+    public string RouteDetails
+    {
+        get => _routeDetails;
+        set => this.RaiseAndSetIfChanged(ref _routeDetails, value, nameof(RouteDetails));
+    }
+
 
     public FlightData(string id, string route, string date)
     {
@@ -21,10 +45,10 @@ public class FlightData
         Date = date;
     }
 
-    public FlightData()
+    public FlightData(FlightData f)
     {
-        Id = 0;
-        Route = "";
-        Date = "";
+        Id = f.Id;
+        Route = f.Route;
+        Date = f.Date;
     }
 }

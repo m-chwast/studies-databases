@@ -13,7 +13,7 @@
             BorderThickness="1"
             BorderBrush="Gray"
             GridLinesVisibility="All"
-            SelectedItem="{Binding SelectedFlight, Mode=OneWayToSource}">
+            SelectedItem="{Binding SelectedFlight, Mode=TwoWay}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Route" Binding="{Binding Route}" />
