@@ -42,3 +42,33 @@ BEGIN
 $$;
 
 GRANT EXECUTE ON FUNCTION airline.get_flight_details TO db_user_1;
+
+
+CREATE OR REPLACE PROCEDURE airline.insert_flight(
+  route int, 
+  flight_date timestamp,
+  aircraft int
+)
+LANGUAGE plpgsql
+AS
+$$  
+DECLARE
+  tmp_id integer;
+  
+BEGIN
+  SELECT FROM airline.route r WHERE r.route_id = route INTO tmp_id;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Route % not in database', route;
+  END IF;
+
+  SELECT FROM airline.aircraft a WHERE a.aircraft_id = aircraft INTO tmp_id;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Aircraft % not in database', aircraft;
+  END IF;
+   
+  INSERT INTO airline.flight (route_id, flight_date, aircraft_id) 
+  VALUES (route, flight_date, aircraft);
+ END;
+ $$;
+ 
+ GRANT EXECUTE ON PROCEDURE airline.insert_flight TO db_user_1;
