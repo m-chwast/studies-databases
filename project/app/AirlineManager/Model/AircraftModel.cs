@@ -15,16 +15,9 @@ public class AircraftModel : ModelBase
     public async Task<List<AircraftData>> GetNewData(bool isSummary)
     {
         const string aircraftLongQuery = @"
-            SELECT a.aircraft_id, at.aircraft_type_name
-            FROM airline.aircraft a JOIN airline.aircraft_type at 
-            ON a.aircraft_type_id = at.aircraft_type_id";
+            SELECT * FROM airline.aircraft_long_view";
         const string aircraftShortQuery = @"
-            SELECT at.aircraft_type_name, COUNT(*) cnt
-            FROM airline.aircraft a
-            JOIN airline.aircraft_type at
-            ON a.aircraft_type_id = at.aircraft_type_id
-            GROUP BY at.aircraft_type_name
-            ORDER BY cnt DESC";
+            SELECT * FROM airline.aircraft_short_view";
 
         // another idea was to do this in a single query, something like this
         /*
