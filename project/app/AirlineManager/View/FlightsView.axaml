@@ -92,7 +92,7 @@
                     <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Name" Binding="{Binding FirstName}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Surname" Binding="{Binding LastName}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Passport" Binding="{Binding Role}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Role" Binding="{Binding Role}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
 
