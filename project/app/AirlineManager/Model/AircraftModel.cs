@@ -15,9 +15,9 @@ public class AircraftModel : ModelBase
     public async Task<List<AircraftData>> GetNewData(bool isSummary)
     {
         const string aircraftLongQuery = @"
-            SELECT * FROM airline.aircraft_long_view";
+            SELECT * FROM linia.samolot_dlugi_widok";
         const string aircraftShortQuery = @"
-            SELECT * FROM airline.aircraft_short_view";
+            SELECT * FROM linia.samolot_krotki_widok";
 
         // another idea was to do this in a single query, something like this
         /*

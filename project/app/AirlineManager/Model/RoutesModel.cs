@@ -15,9 +15,9 @@ public class RoutesModel : ModelBase
     public async Task<IEnumerable<AirportData>> GetAirports()
     {
         const string query = @"
-            SELECT a.airport_designator, a.airport_name
-            FROM airline.airport a
-            ORDER BY a.airport_designator;";
+            SELECT l.lotnisko_kod, l.lotnisko_nazwa
+            FROM linia.lotnisko l
+            ORDER BY l.lotnisko_kod;";
 
         var dataTable = await _database.GetData(query);
 
@@ -34,7 +34,7 @@ public class RoutesModel : ModelBase
     public async Task<IEnumerable<RouteData>> GetRoutes()
     {
         const string query = @"
-            SELECT * FROM airline.get_routes();";
+            SELECT * FROM linia.czytaj_trasy();";
 
         var dataTable = await _database.GetData(query);
 
@@ -51,14 +51,14 @@ public class RoutesModel : ModelBase
     public async Task AddRoute(string departure, string destination, float time)
     {
         string query = $@"
-            CALL airline.insert_route('{departure}', '{destination}', {time});";
+            CALL linia.dodaj_trase('{departure}', '{destination}', {time});";
         await _database.ExecuteQuery(query);
     }
 
     public async Task DeleteRoute(int id)
     {
         string query = $@"
-            CALL airline.delete_route({id});";
+            CALL linia.usun_trase({id});";
         await _database.ExecuteQuery(query);
     }
 }

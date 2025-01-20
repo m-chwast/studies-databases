@@ -19,8 +19,8 @@ GRANT USAGE ON SCHEMA linia TO db_user_1;
 -- adding permissions to read all tables for the user
 GRANT SELECT ON ALL TABLES IN SCHEMA linia TO db_user_1;
 -- adding other permissions
-GRANT INSERT ON osoba TO db_user_1;
-GRANT DELETE ON osoba TO db_user_1;
+GRANT INSERT ON linia.osoba TO db_user_1;
+GRANT DELETE ON linia.osoba TO db_user_1;
 
 -- grant permissions for route procedures/functions
 GRANT EXECUTE ON PROCEDURE linia.dodaj_trase TO db_user_1;

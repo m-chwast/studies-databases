@@ -24,9 +24,9 @@ public class PersonnelModel : ModelBase
     public async Task<IEnumerable<string>> GetRoles()
     {
         const string query = @"
-            SELECT r.role_name
-            FROM airline.role r
-            ORDER BY r.role_id;";
+            SELECT r.rola_nazwa
+            FROM linia.rola r
+            ORDER BY r.rola_id;";
 
         var dataTable = await _database.GetData(query);
 
@@ -65,8 +65,8 @@ public class PersonnelModel : ModelBase
     public async Task<bool> AddPerson(string name, string surname, string role)
     {
         string query = $@"
-            INSERT INTO airline.person (person_name, person_surname, person_role_id)
-            VALUES ('{name}', '{surname}', (SELECT role_id FROM airline.role WHERE role_name = '{role}'));";
+            INSERT INTO linia.osoba (osoba_imie, osoba_nazwisko, osoba_rola_id)
+            VALUES ('{name}', '{surname}', (SELECT rola_id FROM linia.rola WHERE rola_nazwa = '{role}'));";
 
         return await _database.ExecuteQuery(query);
     }
@@ -77,8 +77,8 @@ public class PersonnelModel : ModelBase
             return Task.FromResult(true);
 
         string query = $@"
-            DELETE FROM airline.person
-            WHERE person_id IN ({string.Join(',', ids)});";
+            DELETE FROM linia.osoba
+            WHERE osoba_id IN ({string.Join(',', ids)});";
 
         return _database.ExecuteQuery(query);
     }
@@ -86,17 +86,17 @@ public class PersonnelModel : ModelBase
     private string GetFilteredPersonnelQuery(int? id, string? surname)
     {
         string query = @"
-            SELECT p.person_id, p.person_name, p.person_surname, r.role_name
-            FROM airline.person p
-            JOIN airline.role r
-            ON p.person_role_id = r.role_id
+            SELECT o.osoba_id, o.osoba_imie, o.osoba_nazwisko, r.rola_nazwa
+            FROM linia.osoba o
+            JOIN linia.rola r
+            ON o.osoba_rola_id = r.rola_id
             WHERE ";
 
         bool isSurnameFilter = !string.IsNullOrEmpty(surname);
         if(id is not null)
-            query += $"p.person_id = {id}" + (isSurnameFilter ? " AND " : "");
+            query += $"o.osoba_id = {id}" + (isSurnameFilter ? " AND " : "");
         if(isSurnameFilter)
-            query += $"p.person_surname LIKE '{surname}%'";
+            query += $"o.osoba_nazwisko LIKE '{surname}%'";
 
         query += ";";
 
@@ -106,10 +106,10 @@ public class PersonnelModel : ModelBase
     private string GetPersonnelQuery(bool flightAttendants, bool captains, bool firstOfficers)
     {
         string query = @"
-            SELECT p.person_id, p.person_name, p.person_surname, r.role_name
-            FROM airline.person p
-            JOIN airline.role r
-            ON p.person_role_id = r.role_id
+            SELECT o.osoba_id, o.osoba_imie, o.osoba_nazwisko, r.rola_nazwa
+            FROM linia.osoba o
+            JOIN linia.rola r
+            ON o.osoba_rola_id = r.rola_id
             WHERE ";
 
         bool getAnyRoles = flightAttendants || captains || firstOfficers;
@@ -119,15 +119,15 @@ public class PersonnelModel : ModelBase
         if(getAnyRoles)
         {
             if(flightAttendants)
-                whereCondition += " OR r.role_name = 'Flight Attendant'";
+                whereCondition += " OR r.rola_nazwa = 'Steward'";
             if(captains)
-                whereCondition += " OR r.role_name = 'Captain'";
+                whereCondition += " OR r.rola_nazwa = 'Kapitan'";
             if(firstOfficers)
-                whereCondition += " OR r.role_name = 'First Officer'";
+                whereCondition += " OR r.rola_nazwa = 'Pierwszy Oficer'";
         }
 
         query += whereCondition;
-        query += " ORDER BY p.person_surname;";
+        query += " ORDER BY o.osoba_nazwisko;";
 
         return query;           
     }

@@ -104,7 +104,7 @@ BEGIN
 
   SELECT r.rola_id
   FROM linia.rola r
-  JOIN linia.osoba o ON o.oosba_rola_id = r.rola_id
+  JOIN linia.osoba o ON o.osoba_rola_id = r.rola_id
   WHERE o.osoba_id = osoba
   INTO osoba_rola;
 

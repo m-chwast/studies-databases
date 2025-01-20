@@ -15,7 +15,7 @@ public class FlightModel : ModelBase
 
     public async Task<IEnumerable<FlightData>> GetFlights()
     {
-        const string query = "SELECT * FROM airline.flights_view";
+        const string query = "SELECT * FROM linia.loty_widok;";
         var data = await _database.GetData(query);
         List<FlightData> flights = new();
         foreach (var row in data.Data)
@@ -28,7 +28,7 @@ public class FlightModel : ModelBase
 
     public async Task GetFlightDetails(FlightData flight)
     {
-        string query = $@"SELECT * FROM airline.get_flight_details({flight.Id})";
+        string query = $@"SELECT * FROM linia.czytaj_detale_lotu({flight.Id});";
         var data = await _database.GetData(query);
         if(data.RowCount == 0)
             return;
@@ -38,12 +38,12 @@ public class FlightModel : ModelBase
         flight.RouteDetails = row[2];
 
         string personnelQuery = $@"
-        SELECT p.person_id, p.person_name, p.person_surname, r.role_name
-        FROM airline.flight f
-        JOIN airline.flight_crew fc ON f.flight_id = fc.flight_id
-        JOIN airline.person p ON p.person_id = fc.person_id
-        JOIN airline.role r ON r.role_id = p.person_role_id
-        WHERE f.flight_id = {flight.Id};";
+        SELECT o.osoba_id, o.osoba_imie, o.osoba_nazwisko, r.rola_nazwa
+        FROM linia.lot l
+        JOIN linia.lot_zaloga lz ON l.lot_id = lz.lot_id
+        JOIN linia.osoba o ON o.osoba_id = lz.osoba_id
+        JOIN linia.rola r ON r.rola_id = o.osoba_rola_id
+        WHERE l.lot_id = {flight.Id};";
 
         var personnelData = await _database.GetData(personnelQuery);
         List<PersonnelData> personnel = new();
@@ -57,25 +57,25 @@ public class FlightModel : ModelBase
 
     public async Task AddFlight(string route, string date, string aircraft)
     {
-        string query = $@"CALL airline.insert_flight({route}, '{date}', {aircraft});";
+        string query = $@"CALL linia.dodaj_lot({route}, '{date}', {aircraft});";
         await _database.ExecuteQuery(query);
     }
 
     public async Task DeleteFlight(int flightId)
     {
-        string query = $@"DELETE FROM airline.flight f WHERE f.flight_id = {flightId};";
+        string query = $@"DELETE FROM linia.lot l WHERE l.lot_id = {flightId};";
         await _database.ExecuteQuery(query);
     }
 
     public async Task AddPersonToCrew(int flightId, int personId)
     {
-        string query = $@"CALL airline.add_person_to_flight({flightId}, {personId});";
+        string query = $@"CALL linia.dodaj_osobe_do_lotu({flightId}, {personId});";
         await _database.ExecuteQuery(query);
     }
 
     public async Task RemovePersonFromCrew(int flightId, int personId)
     {
-        string query = $@"CALL airline.remove_person_from_flight({flightId}, {personId});";
+        string query = $@"CALL linia.usun_osobe_z_lotu({flightId}, {personId});";
         await _database.ExecuteQuery(query);
     }
 }
