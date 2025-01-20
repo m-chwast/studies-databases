@@ -13,7 +13,7 @@
             
             <Border BorderBrush="Gray" BorderThickness="1" Padding="5" DockPanel.Dock="Top">
             <DockPanel> 
-                <TextBlock Text="Dodaj Linię" DockPanel.Dock="Top"/>
+                <TextBlock Text="Dodaj Trasę" DockPanel.Dock="Top"/>
                 <StackPanel Orientation="Horizontal" Spacing="10">
                     <StackPanel>
                         <TextBlock Text="Wylot"/>
