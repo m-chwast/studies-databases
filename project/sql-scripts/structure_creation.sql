@@ -25,7 +25,7 @@ CREATE TABLE linia.trasa(trasa_id int GENERATED ALWAYS AS IDENTITY, czas_lotu fl
                    FOREIGN KEY (odlot_id) REFERENCES linia.lotnisko(lotnisko_id),
                    FOREIGN KEY (przylot_id) REFERENCES linia.lotnisko(lotnisko_id));
 
-CREATE TABLE linia.lot(lot_id int GENERATED ALWAYS AS IDENTITY, lot_data date,
+CREATE TABLE linia.lot(lot_id int GENERATED ALWAYS AS IDENTITY, lot_data timestamp,
                     trasa_id int, samolot_id int,
                     PRIMARY KEY (lot_id),
                     FOREIGN KEY (trasa_id) REFERENCES linia.trasa(trasa_id),
